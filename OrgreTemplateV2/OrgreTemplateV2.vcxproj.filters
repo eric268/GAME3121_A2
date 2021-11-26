@@ -39,7 +39,7 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>PhysicsLibrary</Filter>
     </ClCompile>
-    <ClCompile Include="BackgroundPlane.cpp">
+    <ClCompile Include="BackgroundObject.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>PhysicsLibrary</Filter>
     </ClInclude>
-    <ClInclude Include="BackgroundPlane.h">
+    <ClInclude Include="BackgroundObject.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

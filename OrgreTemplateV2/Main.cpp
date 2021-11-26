@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "UIManager.h"
+#include "BackgroundObject.h"
 #include "DoodlePlayer.h"
 #include "PongPaddle.h"
 
@@ -21,6 +22,7 @@ class MainInitalizer
 private:
 	PongPaddle* m_player1Pong;
 	DoodlePlayer*   m_doodlePlayer;
+	BackgroundObject* m_backgroundObject[2];
 	UIManager* m_UIManager;
 	SceneManager* scnMgr;
 	Root* root;
@@ -194,19 +196,15 @@ void MainInitalizer::createScene()
 	// Set Light Reflective Color
 	light->setSpecularColour(1.0f, 1.0f, 0.0f);
 
-	//The first thing we'll do is create an abstract Plane object. This is not the mesh, it is more of a blueprint.
-	Plane plane(Vector3::UNIT_Y, -10);
-	//Now we'll ask the MeshManager to create us a mesh using our Plane blueprint. The MeshManager is already keeping track of the resources we loaded when initializing our application. On top of this, it can create new meshes for us.
-	MeshManager::getSingleton().createPlane(
-		"ground", RGN_DEFAULT,
-		plane,
-		1500, 1500, 20, 20,
-		true,
-		1, 5, 5,
-		Vector3::UNIT_Z);
-	
+
+
+
 	m_player1Pong = new PongPaddle(scnMgr->createSceneNode("Player1"),scnMgr);
 	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_player1Pong);
+
+	m_backgroundObject[0] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode1"), scnMgr, m_doodlePlayer, 0);
+	m_backgroundObject[1] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode2"), scnMgr, m_doodlePlayer, 1);
+	m_backgroundObject[1]->GetSceneNode()->setPosition(0, -10, -m_backgroundObject[1]->GetBackgroundZExtent());
 
 	Ogre::Viewport* viewport = getRenderWindow()->addViewport(m_doodlePlayer->GetPlayerCamera());
 	viewport->setBackgroundColour(Ogre::ColourValue(0.0, 0.0, 0.0));
@@ -232,13 +230,17 @@ void MainInitalizer::RestartGame()
 
 void MainInitalizer::createFrameListener()
 {
-	Ogre::FrameListener* P1FrameListener =  m_player1Pong;
-	Ogre::FrameListener* BallFrameListener = m_doodlePlayer;
-	Ogre::FrameListener* UIManagerListener = m_UIManager;
+	Ogre::FrameListener* P1FrameListener = m_player1Pong;
+	Ogre::FrameListener* DoodlePlayerFrameListener = m_doodlePlayer;
+	Ogre::FrameListener* UIFrameListener = m_UIManager;
+	Ogre::FrameListener* Background1FrameListener = m_backgroundObject[0];
+	Ogre::FrameListener* Background2FrameListener = m_backgroundObject[1];
 
 	mRoot->addFrameListener(P1FrameListener);
-	mRoot->addFrameListener(BallFrameListener);
-	mRoot->addFrameListener(UIManagerListener);
+	mRoot->addFrameListener(DoodlePlayerFrameListener);
+	mRoot->addFrameListener(UIFrameListener);
+	mRoot->addFrameListener(Background1FrameListener);
+	mRoot->addFrameListener(Background2FrameListener);
 }
 
 /// Main Function

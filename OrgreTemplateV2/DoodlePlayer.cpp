@@ -28,7 +28,7 @@ DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Po
 	scnMgr->getRootSceneNode()->addChild(GetSceneNode());
 	SetScale(Ogre::Vector3(0.5f, 0.01f, 1.0f));
 	GetSceneNode()->setScale(GetScale());
-	GetSceneNode()->setPosition(Ogre::Vector3(100, 0, -40));
+	GetSceneNode()->setPosition(Ogre::Vector3(100, 0, -20));
 	SetSpeed(25.0f);
 	SetVelocity(Ogre::Vector3(0, 0, 0));
 	//SetVelocity(Ogre::Vector3(0, 0, GetSpeed()));
@@ -123,9 +123,6 @@ bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 
 	GetSceneNode()->translate(GetVelocity() * evt.timeSinceLastFrame);
 
-	std::cout << "Main Node Postition: " + std::to_string(GetSceneNode()->getPosition().z) << std::endl;
-	std::cout << "Camera Node Postition: " + std::to_string(cameraNode->getPosition().z) << std::endl;
-
 	CheckBounds();
 	if (m_paddleRef->GetLivesRemaining() <= 0)
 	{
@@ -164,7 +161,7 @@ void DoodlePlayer::CreatePlayerCamera(Ogre::SceneManager* scnMgr)
 
 void DoodlePlayer::UpdateCameraPosition(const Ogre::FrameEvent& evt)
 {
-	if (distanceFromCameraToPlayerZAxis > 40)
+	if (distanceFromCameraToPlayerZAxis > 20)
 	{
 		
 		cameraNode->translate(0,0, GetVelocity().z * evt.timeSinceLastFrame);
