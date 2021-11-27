@@ -7,37 +7,39 @@ DoodlePlayer::DoodlePlayer()
 	SetSceneNode(nullptr);
 	SetEntity(nullptr);
 	SetVelocity(Ogre::Vector3(0, 0, 0));
-	SetSpeed(100.0f);
+	SetSpeed(25.0f);
 	m_bIsColliding = false;
 	SetScale(Ogre::Vector3(0.05f, 0.05f, 0.05f));
 	SetWeight(1.0f);
 	m_radius = 100.0f * GetScale().x;
 	m_paddleRef = nullptr;
 	distanceFromCameraToPlayerZAxis = 0;
+	isFacingLeft = false;
 }
 
 DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, PongPaddle* pRef)
 {
-	SetEntity(scnMgr->createEntity("BallEntity", "cube.mesh"));
-	GetEntity()->setMaterial(Ogre::MaterialManager::getSingleton().getByName("DoodlePlayer"));
+	SetEntity(scnMgr->createEntity("penguin.mesh"));
+	//GetEntity()->setMaterial(Ogre::MaterialManager::getSingleton().getByName("DoodlePlayer"));
 	GetEntity()->setCastShadows(false);
 	m_paddleRef = pRef;
-
 	SetSceneNode(node);
 	GetSceneNode()->attachObject(GetEntity());
 	scnMgr->getRootSceneNode()->addChild(GetSceneNode());
-	SetScale(Ogre::Vector3(0.5f, 0.01f, 1.0f));
+	SetScale(Ogre::Vector3(1.0f, 1.0f, 1.0f));
 	GetSceneNode()->setScale(GetScale());
-	GetSceneNode()->setPosition(Ogre::Vector3(100, 0, -20));
+	GetSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
 	SetSpeed(25.0f);
 	SetVelocity(Ogre::Vector3(0, 0, 0));
 	//SetVelocity(Ogre::Vector3(0, 0, GetSpeed()));
 	SetWeight(1.0f);
 	m_radius = 100.0f * GetScale().x;
 	m_bIsColliding = false;
-	
+	GetSceneNode()->roll(Degree(90));
+	GetSceneNode()->pitch(Degree(-90));
 	distanceFromCameraToPlayerZAxis = 0;
 	CreatePlayerCamera(scnMgr);
+	isFacingLeft = true;
 }
 
 DoodlePlayer::~DoodlePlayer()
@@ -95,22 +97,25 @@ void DoodlePlayer::CheckBounds()
 	float m_xBounds = 220;
 	float m_zBounds = 165;
 	
-	if (GetSceneNode()->getPosition().x - GetRadius() <= -m_xBounds)
+	if (GetSceneNode()->getPosition().x <= -m_xBounds)
 	{
-		Ogre::Vector3 temp = GetSceneNode()->getPosition();
+		GetSceneNode()->setPosition(Vector3(m_xBounds - 10, GetSceneNode()->getPosition().y, GetSceneNode()->getPosition().z));
+		/*Ogre::Vector3 temp = GetSceneNode()->getPosition();
 		float overlap = GetSceneNode()->getPosition().x - GetRadius() + m_xBounds;
 		GetSceneNode()->setPosition(Ogre::Vector3(GetSceneNode()->getPosition().x - overlap, temp.y, temp.z));
-		SetVelocity(Ogre::Vector3(GetVelocity().x * -1, GetVelocity().y, GetVelocity().z));
+		SetVelocity(Ogre::Vector3(GetVelocity().x * -1, GetVelocity().y, GetVelocity().z));*/
 	}
-	else if (GetSceneNode()->getPosition().x + GetRadius() >= m_xBounds)
+	else if (GetSceneNode()->getPosition().x >= m_xBounds)
 	{
-		Ogre::Vector3 temp = GetSceneNode()->getPosition();
-		float overlap = m_xBounds - GetSceneNode()->getPosition().x - GetRadius();
-		GetSceneNode()->setPosition(Ogre::Vector3(GetSceneNode()->getPosition().x + overlap, temp.y, temp.z));
-		SetVelocity(Ogre::Vector3(GetVelocity().x * -1, GetVelocity().y, GetVelocity().z));
+		GetSceneNode()->setPosition(Vector3(-m_xBounds + 10, GetSceneNode()->getPosition().y, GetSceneNode()->getPosition().z));
+		//Ogre::Vector3 temp = GetSceneNode()->getPosition();
+		//float overlap = m_xBounds - GetSceneNode()->getPosition().x - GetRadius();
+		//GetSceneNode()->setPosition(Ogre::Vector3(GetSceneNode()->getPosition().x + overlap, temp.y, temp.z));
+		//SetVelocity(Ogre::Vector3(GetVelocity().x * -1, GetVelocity().y, GetVelocity().z));
 	}
-	else if (distanceFromCameraToPlayerZAxis <= 0.0f)
+	else if (distanceFromCameraToPlayerZAxis <= playerDiedZValue)
 	{
+		std::cout << distanceFromCameraToPlayerZAxis << std::endl;
 		//GetSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
 		//SetVelocity(Ogre::Vector3(0, 0, GetSpeed()));
 		//m_paddleRef->DecrementLivesRemaining();
@@ -132,7 +137,7 @@ bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 
 	if (CollisionManager::AABBSphere(m_paddleRef, this))
 	{
-		CollisionWithPaddle();
+		//CollisionWithPaddle();
 	}
 	distanceFromCameraToPlayerZAxis = cameraNode->getPosition().z - GetSceneNode()->getPosition().z;
 
@@ -163,8 +168,31 @@ void DoodlePlayer::UpdateCameraPosition(const Ogre::FrameEvent& evt)
 {
 	if (distanceFromCameraToPlayerZAxis > 20)
 	{
-		
 		cameraNode->translate(0,0, GetVelocity().z * evt.timeSinceLastFrame);
 	}
 
+}
+
+void DoodlePlayer::SetIsFacingLeft(bool dir)
+{
+	isFacingLeft = dir;
+}
+
+bool DoodlePlayer::GetIsFacingLeft()
+{
+	return isFacingLeft;
+}
+
+void DoodlePlayer::UpdatePlayerDirection(char input)
+{
+	if (input == 'a' && !isFacingLeft)
+	{
+		isFacingLeft = true;
+		GetSceneNode()->yaw(Degree(-180));
+	}
+	else if (input == 'd' && isFacingLeft)
+	{
+		isFacingLeft = false;
+		GetSceneNode()->yaw(Degree(180));
+	}
 }

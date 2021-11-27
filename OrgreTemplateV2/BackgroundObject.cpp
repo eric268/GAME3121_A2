@@ -45,8 +45,6 @@ bool BackgroundObject::frameStarted(const Ogre::FrameEvent& evt)
 	float playerZPosition = doodlePlayerRef->GetSceneNode()->getPosition().z;
 	distanceToPlayer = GetSceneNode()->getPosition().z - playerZPosition;
 
-	std::cout << "Distance to player: " + std::to_string(distanceToPlayer) << std::endl;
-
 	if (distanceToPlayer > backgroundZExtent)
 	{
 		GetSceneNode()->setPosition(0, -10, playerZPosition - backgroundZExtent);

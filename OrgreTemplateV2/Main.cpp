@@ -144,27 +144,29 @@ bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
 bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 {
 
-
+	
 	switch (evt.keysym.sym)
 	{
 	case SDLK_ESCAPE:
 		getRoot()->queueEndRendering();
 		break;
 	case 'a':
-		//m_doodlePlayer->GetSceneNode()->translate(Vector3(-10, 0, 0));
-		//m_player1Pong->SetVelocity(Ogre::Vector3(-m_player1Pong->GetSpeed(), 0,0));
+		m_doodlePlayer->UpdatePlayerDirection('a');
+		m_doodlePlayer->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetSpeed(), 0,0));
 		break;
 	case 'd':
-		//m_doodlePlayer->GetSceneNode()->translate(Vector3(10, 0, 0));
-		//m_player1Pong->SetVelocity(Ogre::Vector3(m_player1Pong->GetSpeed(), 0, 0));
+		m_doodlePlayer->UpdatePlayerDirection('d');
+		m_doodlePlayer->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetSpeed(), 0, 0));
 		break;
 	case 'w':
-		//m_doodlePlayer->GetSceneNode()->translate(Vector3(0, 0, -10));
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, -m_player1Pong->GetSpeed()));
+		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, -m_doodlePlayer->GetSpeed()));
 		break;
 	case 's':
-		//m_doodlePlayer->GetSceneNode()->translate(Vector3(0, 0, 10));
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, m_player1Pong->GetSpeed()));
+		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetSpeed()));
+	case 't':
+		break;
+	case 'g':
+		break;
 	case 'r':
 		//RestartGame();
 		break;
@@ -196,9 +198,7 @@ void MainInitalizer::createScene()
 	// Set Light Reflective Color
 	light->setSpecularColour(1.0f, 1.0f, 0.0f);
 
-
-
-
+	// and tell it to render into the main window
 	m_player1Pong = new PongPaddle(scnMgr->createSceneNode("Player1"),scnMgr);
 	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_player1Pong);
 

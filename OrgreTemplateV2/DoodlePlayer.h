@@ -18,7 +18,8 @@ private:
 	float m_radius;
 	float cameraPlayerDistanceLimit = 100.0f;
 	float distanceFromCameraToPlayerZAxis;
-
+	float playerDiedZValue = -130.0f;
+	bool isFacingLeft;
 public:
 	//Constructor
 
@@ -91,5 +92,9 @@ public:
 	Camera* GetPlayerCamera();
 
 	void UpdateCameraPosition(const Ogre::FrameEvent& evt);
+
+	void SetIsFacingLeft(bool dir);
+	bool GetIsFacingLeft();
+	void UpdatePlayerDirection(char input);
 };
 
