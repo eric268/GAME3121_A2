@@ -6,6 +6,7 @@ PhysicsBody::PhysicsBody()
 	m_isAffectedByGravity = false;
 	m_velocity = Vector3(0, 0, 0);
 	m_attachedSceneNode = nullptr;
+	m_fSpeed = 50.0f;
 }
 
 PhysicsBody::PhysicsBody(SceneNode* attachedBodyNode)
@@ -14,6 +15,7 @@ PhysicsBody::PhysicsBody(SceneNode* attachedBodyNode)
 	m_gravityScale = 1;
 	m_velocity = Vector3(0, 0, 0);
 	m_attachedSceneNode = attachedBodyNode;
+	m_fSpeed = 50.0f;
 }
 
 PhysicsBody::~PhysicsBody()
@@ -24,7 +26,7 @@ void PhysicsBody::Update(float deltaTime)
 {
 	if (m_isAffectedByGravity)
 	{
-		m_velocity.y -= (9.8f * m_gravityScale) * deltaTime;
+		m_velocity.z += (9.8f * m_gravityScale) * deltaTime;
 	}
 
 	m_attachedSceneNode->translate(m_velocity * deltaTime);
@@ -65,4 +67,24 @@ Vector3 PhysicsBody::GetVelocity()
 void PhysicsBody::SetVelocity(Vector3 velocity)
 {
 	m_velocity = velocity;
+}
+
+float PhysicsBody::GetSpeed()
+{
+	return m_fSpeed;
+}
+
+float PhysicsBody::GetWeight()
+{
+	return m_weight;
+}
+
+void PhysicsBody::SetSpeed(float speed)
+{
+	m_fSpeed = speed;
+}
+
+void PhysicsBody::SetWeight(float weight)
+{
+	m_weight = weight;
 }

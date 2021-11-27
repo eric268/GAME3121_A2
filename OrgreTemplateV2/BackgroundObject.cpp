@@ -5,9 +5,9 @@ BackgroundObject::BackgroundObject()
 	SetScale(Ogre::Vector3(0, 0, 0));
 	
 	SetSceneNode(nullptr);
-	GetSceneNode()->setScale(GetScale());
-	GetSceneNode()->setPosition(0, 10, 0);
-	GetSceneNode()->setPosition(0, 0, 0);
+	GetAttachedSceneNode()->setScale(GetScale());
+	GetAttachedSceneNode()->setPosition(0, 10, 0);
+	GetAttachedSceneNode()->setPosition(0, 0, 0);
 	backgroundZExtent = 0;
 	distanceToPlayer = 0;
 	doodlePlayerRef = nullptr;
@@ -21,14 +21,14 @@ BackgroundObject::BackgroundObject(Ogre::SceneNode* node, Ogre::SceneManager* sc
 	SetScale(Ogre::Vector3(4.5f, 0.01f, 4.5f));
 
 	SetSceneNode(node);
-	GetSceneNode()->attachObject(GetEntity());
-	scnMgr->getRootSceneNode()->addChild(GetSceneNode());
-	GetSceneNode()->setScale(GetScale());
-	GetSceneNode()->setPosition(0, -10, 0);
+	GetAttachedSceneNode()->attachObject(GetEntity());
+	scnMgr->getRootSceneNode()->addChild(GetAttachedSceneNode());
+	GetAttachedSceneNode()->setScale(GetScale());
+	GetAttachedSceneNode()->setPosition(0, -10, 0);
 
 	doodlePlayerRef = playerRef;
-	distanceToPlayer = GetSceneNode()->getPosition().z - playerRef->GetSceneNode()->getPosition().z;
-	backgroundZExtent = GetSceneNode()->getPosition().z + (50.0f * GetScale().z);
+	distanceToPlayer = GetAttachedSceneNode()->getPosition().z - playerRef->GetAttachedSceneNode()->getPosition().z;
+	backgroundZExtent = GetAttachedSceneNode()->getPosition().z + (50.0f * GetScale().z);
 }
 
 BackgroundObject::~BackgroundObject()
@@ -42,12 +42,12 @@ float BackgroundObject::GetBackgroundZExtent()
 
 bool BackgroundObject::frameStarted(const Ogre::FrameEvent& evt)
 {
-	float playerZPosition = doodlePlayerRef->GetSceneNode()->getPosition().z;
-	distanceToPlayer = GetSceneNode()->getPosition().z - playerZPosition;
+	float playerZPosition = doodlePlayerRef->GetAttachedSceneNode()->getPosition().z;
+	distanceToPlayer = GetAttachedSceneNode()->getPosition().z - playerZPosition;
 
 	if (distanceToPlayer > backgroundZExtent)
 	{
-		GetSceneNode()->setPosition(0, -10, playerZPosition - backgroundZExtent);
+		GetAttachedSceneNode()->setPosition(0, -10, playerZPosition - backgroundZExtent);
 	}
 
 	return true;

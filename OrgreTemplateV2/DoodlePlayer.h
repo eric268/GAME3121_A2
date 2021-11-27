@@ -4,6 +4,7 @@
 #include "PongPaddle.h"
 #include "CollisionManager.h"
 #include "PhysicsBody.h"
+#include "Collider.h"
 
 /// The class which controls all Pong Ball functionality
 /// 
@@ -21,6 +22,8 @@ private:
 	float distanceFromCameraToPlayerZAxis;
 	float playerDiedZValue = -130.0f;
 	bool isFacingLeft;
+	PhysicsBody* m_physicsBody;
+	CubeCollider* m_cubeCollider;
 public:
 	//Constructor
 
@@ -97,5 +100,8 @@ public:
 	void SetIsFacingLeft(bool dir);
 	bool GetIsFacingLeft();
 	void UpdatePlayerDirection(char input);
+
+	PhysicsBody* GetPhysicsBody();
+	Collider* GetCubeCollider();
 };
 

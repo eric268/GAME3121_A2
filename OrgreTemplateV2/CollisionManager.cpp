@@ -62,5 +62,5 @@ bool CollisionManager::AABBSphere(CubeCollider* cube, SphereCollider* sphere)
 //		ball->SetIsColliding(ans);
 //	}
 
-	return ans;
+	return false;
 }

@@ -55,10 +55,19 @@ void Collider::SetAttachedSceneNode(SceneNode* attachedSceneNode)
 	m_attachedSceneNode = attachedSceneNode;
 }
 
-SceneNode* Collider::GetSceneNode()
+SceneNode* Collider::GetAttachedSceneNode()
 {
 	return m_attachedSceneNode;
 }
+
+Vector3 Collider::GetWorldPosition()
+{
+	float xPos = m_attachedSceneNode->getPosition().x + m_localPosition.x;
+	float yPos = m_attachedSceneNode->getPosition().y + m_localPosition.y;
+	float zPos = m_attachedSceneNode->getPosition().z + m_localPosition.z;
+	return Vector3(xPos, yPos, zPos);
+}
+
 
 
 
@@ -70,6 +79,7 @@ CubeCollider::CubeCollider(SceneNode* attachedSceneNode)
 	SetAllEdges(10.0f);
 	SetIsTrigger(false);
 	SetLocalPosition(Vector3(0, 0, 0));
+	boundingBoxNodeCreated = false;
 }
 
 CubeCollider::~CubeCollider()
@@ -111,6 +121,38 @@ void CubeCollider::SetAllEdges(float length)
 	SetXLength(length);
 	SetYLength(length);
 	SetZLength(length);
+}
+
+void CubeCollider::SetAllEdges(Vector3 vec)
+{
+	SetXLength(vec.x);
+	SetYLength(vec.y);
+	SetZLength(vec.z);
+}
+
+void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr)
+{
+	Entity* entity = scnMgr->createEntity("cube.mesh");
+	m_boundingBoxNode = scnMgr->createSceneNode("Player bounding box node");
+	m_boundingBoxNode->attachObject(entity);
+	m_boundingBoxNode->setScale(xLength/50.0f, yLength / 50.0f, zLength / 50.0f);
+
+	m_boundingBoxNode->setPosition(Vector3(GetAttachedSceneNode()->getPosition().x + GetLocalPosition().x, GetAttachedSceneNode()->getPosition().y + GetLocalPosition().y,
+		GetAttachedSceneNode()->getPosition().z + GetLocalPosition().z));
+	
+	scnMgr->getRootSceneNode()->addChild(m_boundingBoxNode);
+	boundingBoxNodeCreated = true;
+}
+
+void CubeCollider::SetBoundingBoxNodePosition(Vector3 pos)
+{
+	if (boundingBoxNodeCreated)
+	{
+		float xPos = pos.x + GetLocalPosition().x;
+		float yPos = pos.x + GetLocalPosition().y;
+		float zPos = pos.x + GetLocalPosition().z;
+		m_boundingBoxNode->setPosition(xPos, yPos, zPos);
+	}
 }
 
 

@@ -129,11 +129,11 @@ bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
 	switch (evt.keysym.sym)
 	{
 	case 'a':
-		m_player1Pong->SetVelocity(Ogre::Vector3(0, 0, 0));
+		m_player1Pong->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, 0));
 
 		break;
 	case 'd':
-		m_player1Pong->SetVelocity(Ogre::Vector3(0, 0, 0));
+		m_player1Pong->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, 0));
 
 		break;
 	default:
@@ -144,8 +144,6 @@ bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
 
 bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 {
-
-	
 	switch (evt.keysym.sym)
 	{
 	case SDLK_ESCAPE:
@@ -154,26 +152,23 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 	case 'a':
 
 		m_doodlePlayer->UpdatePlayerDirection('a');
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetSpeed(), 0,0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0,0));
 		break;
 	case 'd':
 		m_doodlePlayer->UpdatePlayerDirection('d');
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetSpeed(), 0, 0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0, 0));
 		break;
 	case 'w':
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, -m_doodlePlayer->GetSpeed()));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, -m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
 		break;
 	case 's':
-		m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetSpeed()));
-	case 't':
-		break;
-	case 'g':
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
 		break;
 	case 'r':
 		//RestartGame();
 		break;
 	case 'q':
-		m_player1Pong->GetSceneNode()->setPosition(Ogre::Vector3(-100, 0, m_doodlePlayer->GetSceneNode()->getPosition().z));
+		m_player1Pong->GetAttachedSceneNode()->setPosition(Ogre::Vector3(-100, 0, m_doodlePlayer->GetAttachedSceneNode()->getPosition().z));
 		break;
 	default:
 		break;
@@ -206,7 +201,7 @@ void MainInitalizer::createScene()
 
 	m_backgroundObject[0] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode1"), scnMgr, m_doodlePlayer, 0);
 	m_backgroundObject[1] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode2"), scnMgr, m_doodlePlayer, 1);
-	m_backgroundObject[1]->GetSceneNode()->setPosition(0, -10, -m_backgroundObject[1]->GetBackgroundZExtent());
+	m_backgroundObject[1]->GetAttachedSceneNode()->setPosition(0, -10, -m_backgroundObject[1]->GetBackgroundZExtent());
 
 	Ogre::Viewport* viewport = getRenderWindow()->addViewport(m_doodlePlayer->GetPlayerCamera());
 	viewport->setBackgroundColour(Ogre::ColourValue(0.0, 0.0, 0.0));
@@ -226,8 +221,8 @@ void MainInitalizer::RestartGame()
 	m_player1Pong->SetLivesRemaining(5);
 	m_player1Pong->SetLifeLabel(true);
 	m_player1Pong->SetPointEarned(true);
-	m_doodlePlayer->GetSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
-	m_doodlePlayer->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetSpeed()));
+	m_doodlePlayer->GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
+	m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
 }
 
 void MainInitalizer::createFrameListener()

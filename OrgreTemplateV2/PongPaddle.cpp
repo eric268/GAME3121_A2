@@ -4,15 +4,19 @@ PongPaddle::PongPaddle()
 {
 	SetSceneNode(nullptr);
 	SetEntity(nullptr);
-	SetVelocity(Ogre::Vector3(0, 0, 0));
-	SetSpeed(130.0f);
+
+	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
+	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
+	m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
+	m_physicsBody->SetSpeed(130.0f);
 	m_fBounds = 0;
 	m_pointEarned = false;
 	m_iLivesRemaining = 5;
 	m_iScore = 0;
 	SetScale(Ogre::Vector3(0.5f, 0.1f, 0.1f));
-	SetWeight(1.0f);
+	m_physicsBody->SetWeight(1.0f);
 	m_lifeLost = false;
+
 }
 
 
@@ -24,20 +28,23 @@ PongPaddle::PongPaddle(Ogre::SceneNode* player, Ogre::SceneManager* scnMgr)
 	//GetEntity()->setMaterial(Ogre::MaterialManager::getSingleton().getByName("DoodlePlatform")); 
 	GetEntity()->setCastShadows(false);
 	SetSceneNode(player);
-	GetSceneNode()->attachObject(GetEntity());
+	GetAttachedSceneNode()->attachObject(GetEntity());
 
-	scnMgr->getRootSceneNode()->addChild(GetSceneNode());
+	scnMgr->getRootSceneNode()->addChild(GetAttachedSceneNode());
 	SetScale(Ogre::Vector3(0.5f, 0.2f, 0.2f));
 
-	GetSceneNode()->setScale(GetScale());
-	GetSceneNode()->setPosition(Ogre::Vector3(-100, 0, 130));
-	SetVelocity(Ogre::Vector3(0, 0, 0));
-	SetSpeed(130.0f);
+	GetAttachedSceneNode()->setScale(GetScale());
+	GetAttachedSceneNode()->setPosition(Ogre::Vector3(-100, 0, 130));
+
+	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
+	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
+	m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
+	m_physicsBody->SetSpeed(130.0f);
 	m_fBounds = 195;
 	m_pointEarned = false;
 	m_iLivesRemaining = 5;
 	m_iScore = 0;
-	SetWeight(1.0f);
+	m_physicsBody->SetWeight(1.0f);
 	m_lifeLost = false;
 }
 
@@ -95,22 +102,32 @@ bool PongPaddle::GetLifeLost()
 }
 void PongPaddle::BoundsChecking()
 {
-	if (GetSceneNode()->getPosition().x <= -m_fBounds)
+	if (GetAttachedSceneNode()->getPosition().x <= -m_fBounds)
 	{
-		Ogre::Vector3 temp = GetSceneNode()->getPosition();
-		GetSceneNode()->setPosition(Ogre::Vector3(-m_fBounds, temp.y, temp.z));
+		Ogre::Vector3 temp = GetAttachedSceneNode()->getPosition();
+		GetAttachedSceneNode()->setPosition(Ogre::Vector3(-m_fBounds, temp.y, temp.z));
 	}
-	else if (GetSceneNode()->getPosition().x >= m_fBounds)
+	else if (GetAttachedSceneNode()->getPosition().x >= m_fBounds)
 	{
-		Ogre::Vector3 temp = GetSceneNode()->getPosition();
-		GetSceneNode()->setPosition(Ogre::Vector3(m_fBounds, temp.y, temp.z));
+		Ogre::Vector3 temp = GetAttachedSceneNode()->getPosition();
+		GetAttachedSceneNode()->setPosition(Ogre::Vector3(m_fBounds, temp.y, temp.z));
 	}
 }
 bool PongPaddle::frameStarted(const Ogre::FrameEvent& evt)
 {
-	GetSceneNode()->translate(GetVelocity() * evt.timeSinceLastFrame);
+	//GetSceneNode()->translate(GetVelocity() * evt.timeSinceLastFrame);
 
-	BoundsChecking();
+	//BoundsChecking();
 
 	return true;
+}
+
+PhysicsBody* PongPaddle::GetPhysicsBody()
+{
+	return m_physicsBody;
+}
+
+Collider* PongPaddle::GetCubeCollider()
+{
+	return m_cubeCollider;
 }

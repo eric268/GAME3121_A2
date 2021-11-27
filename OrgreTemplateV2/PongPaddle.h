@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GameObject.h"
+#include "PhysicsBody.h"
+#include "Collider.h"
 
 /// The class which controls all Pong Paddle functionality
 /// 
@@ -14,6 +16,9 @@ private:
 
 	bool m_lifeLost;
 	bool m_pointEarned;
+
+	PhysicsBody* m_physicsBody;
+	Collider* m_cubeCollider;
 public:
 	/// Default constructor for the PongPaddle.
 	/// 
@@ -96,6 +101,9 @@ public:
 	/// @param evt Provides information regarding the time since the last event and the time since last update for each Pong Paddle object.
 	/// @returns Returns true if next frame should be updated and false if next frame should not be updated and the game should be exited.
 	bool frameStarted(const Ogre::FrameEvent& evt);
+
+	PhysicsBody* GetPhysicsBody();
+	Collider* GetCubeCollider();
 };
 
 

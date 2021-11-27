@@ -29,7 +29,9 @@ public:
 	Ogre::Vector3 GetLocalPosition();
 
 	void SetAttachedSceneNode(SceneNode* attachedSceneNode);
-	SceneNode* GetSceneNode();
+	SceneNode* GetAttachedSceneNode();
+
+	Vector3 GetWorldPosition();
 
 private:
 	ColliderType m_colliderType;
@@ -41,7 +43,6 @@ private:
 class CubeCollider : public Collider
 {
 public:
-	//CubeCollider();
 	CubeCollider(SceneNode* attachedSceneNode);
 	~CubeCollider();
 
@@ -54,11 +55,18 @@ public:
 	void SetZLength(float length);
 
 	void SetAllEdges(float length);
+	void SetAllEdges(Vector3 vec);
+
+	void CreateBoundingBox(Ogre::SceneManager* scnMgr);
+	void SetBoundingBoxNodePosition(Vector3 pos);
+
 
 private:
 	float xLength;
 	float yLength;
 	float zLength;
+	SceneNode* m_boundingBoxNode;
+	bool boundingBoxNodeCreated;
 };
 
 class SphereCollider: public Collider
