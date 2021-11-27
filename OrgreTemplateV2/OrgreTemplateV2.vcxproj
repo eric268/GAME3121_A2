@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BackgroundObject.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -32,6 +33,7 @@
     <ClCompile Include="GameObject.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="PhysicsBody.cpp" />
     <ClCompile Include="PongPaddle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -41,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackgroundObject.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -50,6 +53,7 @@
     <ClInclude Include="GameObject.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PhysicsBody.h" />
     <ClInclude Include="PongPaddle.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>

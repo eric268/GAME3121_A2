@@ -32,6 +32,7 @@ public:
 	/// MainInitalizer Constructor
 	MainInitalizer();
 
+
 	/// MainInitalizer Destructor
 	///
 	/// Destroys all pointers owned and managed by MainInitalizer
@@ -109,7 +110,6 @@ void MainInitalizer::setup()
 	// do not forget to call the base first
 	ApplicationContext::setup();
 	addInputListener(this);
-	
 	// get a pointer to the already created root
 	root = getRoot();
 	scnMgr = root->createSceneManager();
@@ -121,6 +121,7 @@ void MainInitalizer::setup()
 	createScene();
 	CreateTraysAndLabels();
 	createFrameListener();
+
 }
 
 bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
@@ -151,6 +152,7 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 		getRoot()->queueEndRendering();
 		break;
 	case 'a':
+
 		m_doodlePlayer->UpdatePlayerDirection('a');
 		m_doodlePlayer->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetSpeed(), 0,0));
 		break;

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "PongPaddle.h"
 #include "CollisionManager.h"
+#include "PhysicsBody.h"
 
 /// The class which controls all Pong Ball functionality
 /// 

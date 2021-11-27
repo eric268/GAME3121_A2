@@ -125,7 +125,6 @@ void DoodlePlayer::CheckBounds()
 
 bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 {
-
 	GetSceneNode()->translate(GetVelocity() * evt.timeSinceLastFrame);
 
 	CheckBounds();

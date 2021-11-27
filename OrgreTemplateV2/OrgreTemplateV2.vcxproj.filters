@@ -42,6 +42,12 @@
     <ClCompile Include="BackgroundObject.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsBody.cpp">
+      <Filter>PhysicsLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>PhysicsLibrary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -61,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="BackgroundObject.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsBody.h">
+      <Filter>PhysicsLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>PhysicsLibrary</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
