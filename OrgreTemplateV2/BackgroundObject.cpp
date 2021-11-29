@@ -29,6 +29,7 @@ BackgroundObject::BackgroundObject(Ogre::SceneNode* node, Ogre::SceneManager* sc
 	doodlePlayerRef = playerRef;
 	distanceToPlayer = GetAttachedSceneNode()->getPosition().z - playerRef->GetAttachedSceneNode()->getPosition().z;
 	backgroundZExtent = GetAttachedSceneNode()->getPosition().z + (50.0f * GetScale().z);
+	GetEntity()->setPolygonModeOverrideable(false);
 }
 
 BackgroundObject::~BackgroundObject()

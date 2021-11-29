@@ -58,7 +58,7 @@ public:
 	void SetAllEdges(Vector3 vec);
 
 	void CreateBoundingBox(Ogre::SceneManager* scnMgr);
-	void SetBoundingBoxNodePosition(Vector3 pos);
+	void TranslateBoundingBox(Vector3 pos);
 
 
 private:
@@ -77,9 +77,13 @@ public:
 
 	float GetRadius();
 	void SetRadius(float radius);
+	void CreateSphericalBoundingBox(SceneManager* scnMgr);
+	void TranslateSphericalBoundingBox(Vector3 pos);
 
 private:
 	float m_radius;
+	SceneNode* sphericalBoundingBoxNode;
+	bool boundingBoxNodeCreated;
 };
 
 class CapsuleCollider : public Collider
@@ -93,6 +97,7 @@ public:
 
 	void SetRadius(float radius);
 	void SetHeight(float height);
+
 private:
 	float m_radius;
 	float m_height;

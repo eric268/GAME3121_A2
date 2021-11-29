@@ -199,6 +199,7 @@ void MainInitalizer::createScene()
 	m_player1Pong = new PongPaddle(scnMgr->createSceneNode("Player1"),scnMgr);
 	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_player1Pong);
 
+
 	m_backgroundObject[0] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode1"), scnMgr, m_doodlePlayer, 0);
 	m_backgroundObject[1] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode2"), scnMgr, m_doodlePlayer, 1);
 	m_backgroundObject[1]->GetAttachedSceneNode()->setPosition(0, -10, -m_backgroundObject[1]->GetBackgroundZExtent());

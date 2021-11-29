@@ -1,7 +1,7 @@
 #include "DoodlePlayer.h"
 #include <string>
 #include <iostream>
-//#define DEBUG
+#define DEBUG
 
 DoodlePlayer::DoodlePlayer()
 {
@@ -16,6 +16,9 @@ DoodlePlayer::DoodlePlayer()
 	m_paddleRef = nullptr;
 	distanceFromCameraToPlayerZAxis = 0;
 	isFacingLeft = false;
+	camera = nullptr;
+	cameraNode = nullptr;
+	m_cubeCollider = nullptr;
 }
 
 DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, PongPaddle* pRef)
@@ -29,32 +32,32 @@ DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Po
 	SetScale(Ogre::Vector3(1.0f, 1.0f, 1.0f));
 	GetAttachedSceneNode()->setScale(GetScale());
 	GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
-
-	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
-	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
-	m_physicsBody->SetSpeed(25.0f);
-	m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
-	//SetVelocity(Ogre::Vector3(0, 0, GetSpeed()));
-	m_physicsBody->SetWeight(1.0f);
-	m_radius = 100.0f * GetScale().x;
-	m_bIsColliding = false;
 	GetAttachedSceneNode()->roll(Degree(90));
 	GetAttachedSceneNode()->pitch(Degree(-90));
 	distanceFromCameraToPlayerZAxis = 0;
-	CreatePlayerCamera(scnMgr);
 	isFacingLeft = true;
 
+	//Physics body initalization
+	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
+	m_physicsBody->SetSpeed(25.0f);
+	m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
+	m_physicsBody->SetWeight(1.0f);
+	m_physicsBody->SetGravityScale(4.5f);
+	m_physicsBody->SetIsAffectedByGravity(false);
+
+	//Creates box collider for player
+	m_bIsColliding = false;
+	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
 	m_cubeCollider->SetAllEdges(Vector3(25.0f, 25.0f, 3.0f));
 	m_cubeCollider->SetLocalPosition(Vector3(0, 0, 20));
 
+	//Creates player follow camera
+	CreatePlayerCamera(scnMgr);
+
 #ifdef DEBUG
 	m_cubeCollider->CreateBoundingBox(scnMgr);
+	camera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
 #endif // DEBUG
-
-
-
-	m_physicsBody->SetGravityScale(4.5f);
-	m_physicsBody->SetIsAffectedByGravity(false);
 }
 
 DoodlePlayer::~DoodlePlayer()
@@ -157,6 +160,11 @@ bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 
 
 	UpdateCameraPosition(evt);
+
+#ifdef DEBUG
+	m_sphereCollider->TranslateSphericalBoundingBox(m_physicsBody->GetVelocity() * evt.timeSinceLastFrame);
+	//m_cubeCollider->TranslateBoundingBox(m_physicsBody->GetVelocity() * evt.timeSinceLastFrame);
+#endif // DEBUG
 	
 	return true;
 }

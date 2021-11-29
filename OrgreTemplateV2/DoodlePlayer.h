@@ -24,6 +24,7 @@ private:
 	bool isFacingLeft;
 	PhysicsBody* m_physicsBody;
 	CubeCollider* m_cubeCollider;
+	SphereCollider* m_sphereCollider;
 public:
 	//Constructor
 

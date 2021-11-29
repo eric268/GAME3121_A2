@@ -144,14 +144,11 @@ void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr)
 	boundingBoxNodeCreated = true;
 }
 
-void CubeCollider::SetBoundingBoxNodePosition(Vector3 pos)
+void CubeCollider::TranslateBoundingBox(Vector3 pos)
 {
 	if (boundingBoxNodeCreated)
 	{
-		float xPos = pos.x + GetLocalPosition().x;
-		float yPos = pos.x + GetLocalPosition().y;
-		float zPos = pos.x + GetLocalPosition().z;
-		m_boundingBoxNode->setPosition(xPos, yPos, zPos);
+		m_boundingBoxNode->translate(pos);
 	}
 }
 
@@ -177,6 +174,28 @@ float SphereCollider::GetRadius()
 void SphereCollider::SetRadius(float radius)
 {
 	m_radius = radius;
+}
+
+void SphereCollider::CreateSphericalBoundingBox(SceneManager* scnMgr)
+{
+	Entity* entity = scnMgr->createEntity("sphere.mesh");
+	sphericalBoundingBoxNode = scnMgr->createSceneNode("Player spherical bounding box node");
+	sphericalBoundingBoxNode->attachObject(entity);
+	sphericalBoundingBoxNode->setScale(m_radius / 100.0f, m_radius / 100.0f, m_radius / 100.0f);
+
+	sphericalBoundingBoxNode->setPosition(Vector3(GetAttachedSceneNode()->getPosition().x + GetLocalPosition().x, GetAttachedSceneNode()->getPosition().y + GetLocalPosition().y,
+		GetAttachedSceneNode()->getPosition().z + GetLocalPosition().z));
+
+	scnMgr->getRootSceneNode()->addChild(sphericalBoundingBoxNode);
+	boundingBoxNodeCreated = true;
+}
+
+void SphereCollider::TranslateSphericalBoundingBox(Vector3 pos)
+{
+	if (boundingBoxNodeCreated)
+	{
+		sphericalBoundingBoxNode->translate(pos);
+	}
 }
 
 CapsuleCollider::CapsuleCollider(SceneNode* attachedSceneNode)
@@ -212,3 +231,4 @@ void CapsuleCollider::SetHeight(float height)
 {
 	m_height = height;
 }
+

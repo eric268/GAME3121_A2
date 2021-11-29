@@ -46,6 +46,7 @@ PongPaddle::PongPaddle(Ogre::SceneNode* player, Ogre::SceneManager* scnMgr)
 	m_iScore = 0;
 	m_physicsBody->SetWeight(1.0f);
 	m_lifeLost = false;
+	GetEntity()->setPolygonModeOverrideable(false);
 }
 
 PongPaddle::~PongPaddle()
