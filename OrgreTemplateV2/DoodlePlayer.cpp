@@ -12,7 +12,6 @@ DoodlePlayer::DoodlePlayer()
 	m_bIsColliding = false;
 	SetScale(Ogre::Vector3(0.05f, 0.05f, 0.05f));
 	m_physicsBody->SetWeight(1.0f);
-	m_radius = 100.0f * GetScale().x;
 	distanceFromCameraToPlayerZAxis = 0;
 	isFacingLeft = false;
 	camera = nullptr;
@@ -87,16 +86,6 @@ bool DoodlePlayer::GetIsColliding()
 void DoodlePlayer::SetIsColliding(bool colliding)
 {
 	m_bIsColliding = colliding;
-}
-
-float DoodlePlayer::GetRadius()
-{
-	return m_radius;
-}
-
-void DoodlePlayer::SetRadius(float radius)
-{
-	m_radius = radius;
 }
 
 void DoodlePlayer::CheckBounds()

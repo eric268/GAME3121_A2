@@ -16,10 +16,11 @@ class UIManager : public Ogre::FrameListener
 {
 private:
 
-	float fpsCounter = 0.0f;
-	float fpsTotal = 0.0f;
+	float fpsCounter;
+	float fpsTotal;
 	float timePerUpdateTotal;
-	float timer = 0.0f;
+	float timer;
+	float m_fSeconds;
 
 	//Labels
 	OgreBites::Label* mScoreLabel;
@@ -36,6 +37,8 @@ private:
 
 	OgreBites::Label* m_GameOverLabel;
 	OgreBites::Label* m_RestartLabel;
+
+	OgreBites::Label* m_secondsLabel;
 
 	DoodlePlayer* m_playerRef;
 
@@ -146,14 +149,19 @@ public:
 	/// @param label is the OgreBites::Label pointer value the FPS label will be set too.
 	void SetFPS(OgreBites::Label* label);
 
-	void SetGameOverLabel(OgreBites::Label* label);
-	OgreBites::Label& GetGameOverLabel();
-
-	void SetRestartGameLabel(OgreBites::Label* label);
-	OgreBites::Label& GetRestartGameLabel();
+	/// <summary> Function which sets the UI managers second variable
+	///
+	/// @params seconds is the floating point value that the UIManagers seconds variable is set to
+	void SetSeconds(float seconds);
 	
+	/// <summary>Creates and updates the captions of the game over labels
+	/// 
+	/// These game over labels appear when the game has ended and include a game won and restart game label</summary>
 	void UpdateGameOverLabels();
 
+	/// <summary>Function that is called to delete game over labels
+	/// 
+	/// This function is called if the game has been restarted</summary>
 	void DeleteGameOverLabels();
 
 	/// Overrides the bool GameObject::frameStarted(const Ogre::FrameEvent& evt) function found in GameObject.h

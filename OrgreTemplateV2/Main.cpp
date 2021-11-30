@@ -84,6 +84,9 @@ public:
 	/// @see UIManager() To see which variables are initalized for the UI
 	void CreateTraysAndLabels();
 
+	/// <summary>Creates and initalizes the platforms
+	/// 
+	/// Creates and initalizes all platforms depending on the maxNumberOfPlatforms integer</summary>
 	void InitPlatforms();
 };
 

@@ -20,6 +20,12 @@ UIManager::UIManager()
 
 UIManager::UIManager(OgreBites::TrayManager* mT, DoodlePlayer* playerRef)
 {
+	fpsCounter = 0.0f;
+	fpsTotal = 0.0f;
+	timePerUpdateTotal = 0;
+	timer = 0.0f;
+	m_fSeconds = 59.0f;
+
 	mTrayMgr = mT;
 	m_playerRef = playerRef;
 
@@ -34,7 +40,6 @@ UIManager::UIManager(OgreBites::TrayManager* mT, DoodlePlayer* playerRef)
 
 	m_TimePerUpdateLabel = mTrayMgr->createLabel(TL_TOPRIGHT, "Time/Update", "Time/Update:", 150);
 	m_TimePerUpdate = mTrayMgr->createLabel(TL_TOPRIGHT, "time/update", std::to_string(0), 150);
-
 }
 
 UIManager::~UIManager()
@@ -145,21 +150,9 @@ void UIManager::SetFPS(OgreBites::Label* label)
 {
 	m_FPS = label;
 }
-void UIManager::SetGameOverLabel(OgreBites::Label* label)
+void UIManager::SetSeconds(float seconds)
 {
-	m_GameOverLabel = label;
-}
-OgreBites::Label& UIManager::GetGameOverLabel()
-{
-	return *m_GameOverLabel;
-}
-void UIManager::SetRestartGameLabel(OgreBites::Label* label)
-{
-	m_RestartLabel = label;
-}
-OgreBites::Label& UIManager::GetRestartGameLabel()
-{
-	return *m_RestartLabel;
+	m_fSeconds = seconds;
 }
 void UIManager::UpdateGameOverLabels()
 {

@@ -1,58 +1,50 @@
-12:41:38: this is my log
-12:41:38: Mesh: Loading penguin.mesh.
-12:41:38: Skeleton: Loading penguin.skeleton
-12:41:38: Texture 'penguin.jpg': Loading 1 faces(PF_B8G8R8,512x512x1) with 9 generated mipmaps from Image. Internal format is PF_A8B8G8R8,512x512x1.
-12:41:38: Mesh: Loading cube.mesh.
-12:41:38: Texture 'background.png': Loading 1 faces(PF_A8B8G8R8,400x533x1) with 9 generated mipmaps from Image. Internal format is PF_A8B8G8R8,400x533x1.
-12:41:38: Warning: material Comps/Comp2 has no supportable Techniques and will be blank. Explanation: 
-Pass 0: fragment program MyFragmentShader21 cannot be used - not supported.
-
-12:41:38: Warning: material Comps/Comp2 has no supportable Techniques and will be blank. Explanation: 
-Pass 0: fragment program MyFragmentShader21 cannot be used - not supported.
-
-12:41:38: CompositorChain: Compositor Compositor2 has no supported techniques.
-12:41:38: Texture 'spot_shadow_fade.png': Loading 1 faces(PF_B8G8R8,128x128x1) with 7 generated mipmaps from Image. Internal format is PF_A8B8G8R8,128x128x1.
-12:41:38: Warnings while compiling D3D11 high-level shader 3acb8316c86e5802dcd22837a701a3cc_VS:
+16:48:16: this is my log
+16:48:16: Mesh: Loading penguin.mesh.
+16:48:16: Skeleton: Loading penguin.skeleton
+16:48:16: Texture 'penguin.jpg': Loading 1 faces(PF_B8G8R8,512x512x1) with 9 generated mipmaps from Image. Internal format is PF_A8B8G8R8,512x512x1.
+16:48:16: Mesh: Loading cube.mesh.
+16:48:16: Texture 'background.png': Loading 1 faces(PF_A8B8G8R8,400x533x1) with 9 generated mipmaps from Image. Internal format is PF_A8B8G8R8,400x533x1.
+16:48:16: Texture 'spot_shadow_fade.png': Loading 1 faces(PF_B8G8R8,128x128x1) with 7 generated mipmaps from Image. Internal format is PF_A8B8G8R8,128x128x1.
+16:48:16: Warnings while compiling D3D11 high-level shader 3acb8316c86e5802dcd22837a701a3cc_VS:
 (31,14-25): warning X3578: Output value 'oTexcoord3_0' is not completely initialized
 
-12:41:38: Warnings while compiling D3D11 high-level shader d368c69c1ef0f646d19c48432f05e338_FS:
+16:48:16: Warnings while compiling D3D11 high-level shader d368c69c1ef0f646d19c48432f05e338_FS:
 SGXLib_LayeredBlending.cg(60,41): warning X4000: use of potentially uninitialized variable (hsl)
 
-12:41:38: Font SdkTrays/Caption using texture size 256x256
-12:41:38: Texture 'SdkTrays/CaptionTexture': Loading 1 faces(PF_BYTE_LA,256x256x1) with 0 custom mipmaps from Image. Internal format is PF_A8B8G8R8,256x256x1.
-12:42:30: Total Game Time: 51.773643
-12:42:32: Unregistering ResourceManager for type Font
-12:42:32: DefaultWorkQueue('Root') shutting down on thread 12524.
-12:42:32: DefaultWorkQueue('Root')::WorkerFunc - thread 8448 stopped.
-12:42:32: DefaultWorkQueue('Root')::WorkerFunc - thread 23516 stopped.
-12:42:32: *-*-* OGRE Shutdown
-12:42:32: Unregistering ResourceManager for type Compositor
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Codec_STBI
-12:42:32: Uninstalling plugin: Cg Program Manager
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_CgProgramManager
-12:42:32: Uninstalling plugin: BSP Scene Manager
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_BSPSceneManager
-12:42:32: Uninstalling plugin: ParticleFX
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_ParticleFX
-12:42:32: Uninstalling plugin: GL 3+ RenderSystem
-12:42:32: *** Stopping Win32GL Subsystem ***
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_GL3Plus
-12:42:32: Uninstalling plugin: GL RenderSystem
-12:42:32: *** Stopping Win32GL Subsystem ***
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_GL
-12:42:32: Uninstalling plugin: D3D11 RenderSystem
-12:42:32: D3D11: Shutting down cleanly.
-12:42:32: Unregistering ResourceManager for type Texture
-12:42:32: Unregistering ResourceManager for type GpuProgram
-12:42:32: D3D11: Direct3D11 Rendering Subsystem destroyed.
-12:42:32: Plugin successfully uninstalled
-12:42:32: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_Direct3D11
-12:42:32: Unregistering ResourceManager for type Skeleton
-12:42:32: Unregistering ResourceManager for type Mesh
-12:42:32: Unregistering ResourceManager for type HighLevelGpuProgram
-12:42:32: Unregistering ResourceManager for type Material
+16:48:16: Font SdkTrays/Caption using texture size 256x256
+16:48:16: Texture 'SdkTrays/CaptionTexture': Loading 1 faces(PF_BYTE_LA,256x256x1) with 0 custom mipmaps from Image. Internal format is PF_A8B8G8R8,256x256x1.
+16:48:45: Unregistering ResourceManager for type Font
+16:48:45: DefaultWorkQueue('Root') shutting down on thread 15904.
+16:48:45: DefaultWorkQueue('Root')::WorkerFunc - thread 18228 stopped.
+16:48:45: DefaultWorkQueue('Root')::WorkerFunc - thread 18232 stopped.
+16:48:45: *-*-* OGRE Shutdown
+16:48:45: Unregistering ResourceManager for type Compositor
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Codec_STBI
+16:48:45: Uninstalling plugin: Cg Program Manager
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_CgProgramManager
+16:48:45: Uninstalling plugin: BSP Scene Manager
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_BSPSceneManager
+16:48:45: Uninstalling plugin: ParticleFX
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\Plugin_ParticleFX
+16:48:45: Uninstalling plugin: GL 3+ RenderSystem
+16:48:45: *** Stopping Win32GL Subsystem ***
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_GL3Plus
+16:48:45: Uninstalling plugin: GL RenderSystem
+16:48:45: *** Stopping Win32GL Subsystem ***
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_GL
+16:48:45: Uninstalling plugin: D3D11 RenderSystem
+16:48:45: D3D11: Shutting down cleanly.
+16:48:45: Unregistering ResourceManager for type Texture
+16:48:45: Unregistering ResourceManager for type GpuProgram
+16:48:45: D3D11: Direct3D11 Rendering Subsystem destroyed.
+16:48:45: Plugin successfully uninstalled
+16:48:45: Unloading library D:/Game Programming F2021/Game Engine Development/GAME3121_A2/OrgreTemplateV2/x64/Debug/.\RenderSystem_Direct3D11
+16:48:45: Unregistering ResourceManager for type Skeleton
+16:48:45: Unregistering ResourceManager for type Mesh
+16:48:45: Unregistering ResourceManager for type HighLevelGpuProgram
+16:48:45: Unregistering ResourceManager for type Material
