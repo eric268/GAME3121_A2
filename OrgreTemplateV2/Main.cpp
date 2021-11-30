@@ -20,7 +20,8 @@ class MainInitalizer
 	, public InputListener
 {
 private:
-	Platform* m_player1Pong;
+	const int m_iNumberOfPlatforms = 25;
+	Platform** m_platformArray;
 	DoodlePlayer*   m_doodlePlayer;
 	BackgroundObject* m_backgroundObject[2];
 	UIManager* m_UIManager;
@@ -82,6 +83,8 @@ public:
 	/// Creates the tray manager and initializes UIManager variables
 	/// @see UIManager() To see which variables are initalized for the UI
 	void CreateTraysAndLabels();
+
+	void InitPlatforms();
 };
 
 
@@ -92,16 +95,25 @@ MainInitalizer::MainInitalizer()
 
 MainInitalizer::~MainInitalizer()
 {
-	delete m_player1Pong;
-	m_player1Pong = nullptr;
+	for (int i = 0; i < m_iNumberOfPlatforms; i++)
+	{
+		delete m_platformArray[i];
+		m_platformArray[i] = nullptr;
+	}
+
+	delete m_backgroundObject[0];
+	m_backgroundObject[0] = nullptr;
+
+	delete m_backgroundObject[1];
+	m_backgroundObject[1] = nullptr;
+
+
 	delete m_doodlePlayer;
 	m_doodlePlayer = nullptr;
 	delete m_UIManager;
 	m_UIManager = nullptr;
 	delete scnMgr;
 	scnMgr = nullptr;
-	delete root;
-	root = nullptr;
 }
 
 
@@ -119,9 +131,8 @@ void MainInitalizer::setup()
 	shadergen->addSceneManager(scnMgr);
 
 	createScene();
-	CreateTraysAndLabels();
-	createFrameListener();
 
+	createFrameListener();
 }
 
 bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
@@ -157,14 +168,8 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 		m_doodlePlayer->UpdatePlayerDirection('d');
 		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0, m_doodlePlayer->GetPhysicsBody()->GetVelocity().z));
 		break;
-	case 'w':
-		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, -m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
-		break;
-	case 's':
-		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
-		break;
 	case 'r':
-		//RestartGame();
+		RestartGame();
 		break;
 	case 'q':
 		break;
@@ -174,6 +179,23 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 	return true;
 }
 
+void MainInitalizer::InitPlatforms()
+{
+	float xPlatformBounds = 125;
+	m_platformArray = new Platform * [m_iNumberOfPlatforms];
+
+	for (int i = 0; i < m_iNumberOfPlatforms; i++)
+	{
+		std::string nodeName = "Platform" + std::to_string((1 + i));
+		m_platformArray[i] = new Platform(scnMgr->createSceneNode(nodeName), scnMgr, (i+1));
+
+		float ranXVal = Math::RangeRandom(-xPlatformBounds, xPlatformBounds);
+		float ranZVal = Math::RangeRandom(0, 25);
+		m_platformArray[i]->GetAttachedSceneNode()->setPosition(ranXVal, 0, -100 * i + 125.f - ranZVal);
+	}
+	m_platformArray[0]->GetAttachedSceneNode()->setPosition(0, 0, 150);
+
+}
 
 void MainInitalizer::createScene()
 {
@@ -193,9 +215,11 @@ void MainInitalizer::createScene()
 	// Set Light Reflective Color
 	light->setSpecularColour(1.0f, 1.0f, 0.0f);
 
+	
+	InitPlatforms();
 	// and tell it to render into the main window
-	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr);
-	m_player1Pong = new Platform(scnMgr->createSceneNode("Player1"),scnMgr, m_doodlePlayer);
+	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_platformArray, m_iNumberOfPlatforms);
+
 
 
 
@@ -207,33 +231,47 @@ void MainInitalizer::createScene()
 	viewport->setBackgroundColour(Ogre::ColourValue(0.0, 0.0, 0.0));
 	m_doodlePlayer->GetPlayerCamera()->setAspectRatio(Ogre::Real(viewport->getActualWidth()) / Ogre::Real(viewport->getActualHeight()));
 
+	CreateTraysAndLabels();
 }
 
 void MainInitalizer::CreateTraysAndLabels()
 {
 	OgreBites::TrayManager* mTrayMgr =  new OgreBites::TrayManager("InterfaceName", getRenderWindow());
-	m_UIManager = new UIManager(mTrayMgr, m_player1Pong, m_doodlePlayer);
+	m_UIManager = new UIManager(mTrayMgr, m_doodlePlayer);
 	scnMgr->addRenderQueueListener(mOverlaySystem);
 }
 void MainInitalizer::RestartGame()
 {
-	m_player1Pong->SetScore(0);
-	m_player1Pong->SetLivesRemaining(5);
-	m_player1Pong->SetLifeLabel(true);
-	m_player1Pong->SetPointEarned(true);
+	m_doodlePlayer->SetScore(0);
+	m_doodlePlayer->SetLivesRemaining(3);
+	m_doodlePlayer->SetLifeLabel(true);
+	m_doodlePlayer->SetPointEarned(true);
 	m_doodlePlayer->GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
-	m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
+	m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, 0));
+	m_doodlePlayer->GetCameraNode()->setPosition(0,400,0);
+	m_doodlePlayer->SetGameOver(false);
+	m_doodlePlayer->SetGameWon(false);
+	m_doodlePlayer->GetPhysicsBody()->SetIsAffectedByGravity(true);
+	m_doodlePlayer->ShowPlayerAndPlatforms();
+
+	m_backgroundObject[0]->GetAttachedSceneNode()->setVisible(true);
+	m_backgroundObject[1]->GetAttachedSceneNode()->setVisible(true);
+
+	m_backgroundObject[0]->GetAttachedSceneNode()->setPosition(m_backgroundObject[0]->GetBackgroundStartingPosition());
+	Vector3 pos = m_backgroundObject[1]->GetBackgroundStartingPosition();
+	m_backgroundObject[1]->GetAttachedSceneNode()->setPosition(pos.x, pos.y, pos.z - m_backgroundObject[0]->GetBackgroundZExtent());
+	
+	m_UIManager->DeleteGameOverLabels();
+
 }
 
 void MainInitalizer::createFrameListener()
 {
-	Ogre::FrameListener* P1FrameListener = m_player1Pong;
 	Ogre::FrameListener* DoodlePlayerFrameListener = m_doodlePlayer;
 	Ogre::FrameListener* UIFrameListener = m_UIManager;
 	Ogre::FrameListener* Background1FrameListener = m_backgroundObject[0];
 	Ogre::FrameListener* Background2FrameListener = m_backgroundObject[1];
 
-	mRoot->addFrameListener(P1FrameListener);
 	mRoot->addFrameListener(DoodlePlayerFrameListener);
 	mRoot->addFrameListener(UIFrameListener);
 	mRoot->addFrameListener(Background1FrameListener);

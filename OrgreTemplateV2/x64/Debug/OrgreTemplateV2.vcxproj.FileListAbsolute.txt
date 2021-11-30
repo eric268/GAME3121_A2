@@ -4,3 +4,4 @@ C:\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplate
 D:\Game Programming F2021\Game Engine Development\A1\GAME3121_A1\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
 D:\Game Programming F2021\Game Engine Development\A2\GAME3121_A2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
 D:\Game Programming F2021\Game Engine Development\GAME3121_A2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
+D:\Game Programming F2021\GAME3121_A2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe

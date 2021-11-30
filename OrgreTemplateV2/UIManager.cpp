@@ -4,8 +4,7 @@
 UIManager::UIManager()
 {
 	mTrayMgr = nullptr;
-	m_paddleRef = nullptr;
-	m_ballRef = nullptr;
+	m_playerRef = nullptr;
 
 	mScoreLabel = nullptr;
 	mScore = nullptr;
@@ -19,24 +18,25 @@ UIManager::UIManager()
 	m_TimePerUpdate = nullptr;
 }
 
-UIManager::UIManager(OgreBites::TrayManager* mT, Platform* paddleRef, DoodlePlayer* ballRef)
+UIManager::UIManager(OgreBites::TrayManager* mT, DoodlePlayer* playerRef)
 {
 	mTrayMgr = mT;
-	m_paddleRef = paddleRef;
-	m_ballRef = ballRef;
+	m_playerRef = playerRef;
 
 	mScoreLabel = mTrayMgr->createLabel(TL_TOPLEFT, "Score", "Score:", 150);
-	mScore = mTrayMgr->createLabel(TL_TOPLEFT, "score", std::to_string(m_paddleRef->GetScore()), 150);
+	mScore = mTrayMgr->createLabel(TL_TOPLEFT, "score", std::to_string(m_playerRef->GetScore()), 150);
 
 	mLivesLabel = mTrayMgr->createLabel(TL_TOPLEFT, "Lives", "Lives:", 150);
-	mLives = mTrayMgr->createLabel(TL_TOPLEFT, "lives", std::to_string(m_paddleRef->GetLivesRemaining()), 150);
+	mLives = mTrayMgr->createLabel(TL_TOPLEFT, "lives", std::to_string(m_playerRef->GetLivesRemaining()), 150);
 
 	m_FPSLabel = mTrayMgr->createLabel(TL_TOPRIGHT, "FPS", "FPS:", 150);
 	m_FPS = mTrayMgr->createLabel(TL_TOPRIGHT, "fps", std::to_string(0), 150);
 
 	m_TimePerUpdateLabel = mTrayMgr->createLabel(TL_TOPRIGHT, "Time/Update", "Time/Update:", 150);
-	m_TimePerUpdate = mTrayMgr->createLabel(TL_TOPRIGHT, "time/update", std::to_string(0), 150);	
+	m_TimePerUpdate = mTrayMgr->createLabel(TL_TOPRIGHT, "time/update", std::to_string(0), 150);
+
 }
+
 UIManager::~UIManager()
 {
 	delete mTrayMgr;
@@ -66,8 +66,7 @@ UIManager::~UIManager()
 	delete m_TimePerUpdate;
 	m_TimePerUpdate	= nullptr;
 
-	m_paddleRef = nullptr;
-	m_ballRef = nullptr;
+	m_playerRef = nullptr;
 
 }
 
@@ -146,12 +145,51 @@ void UIManager::SetFPS(OgreBites::Label* label)
 {
 	m_FPS = label;
 }
-void UIManager::CalculateFPS(float deltaTime)
+void UIManager::SetGameOverLabel(OgreBites::Label* label)
 {
-	timer += deltaTime;
-	if (deltaTime != 0)
+	m_GameOverLabel = label;
+}
+OgreBites::Label& UIManager::GetGameOverLabel()
+{
+	return *m_GameOverLabel;
+}
+void UIManager::SetRestartGameLabel(OgreBites::Label* label)
+{
+	m_RestartLabel = label;
+}
+OgreBites::Label& UIManager::GetRestartGameLabel()
+{
+	return *m_RestartLabel;
+}
+void UIManager::UpdateGameOverLabels()
+{
+	if (!m_GameOverLabel && !m_RestartLabel && m_playerRef->GetGameOver())
 	{
-		fpsTotal += 1.0f / deltaTime;
+		m_GameOverLabel = mTrayMgr->createLabel(TL_CENTER, "Game Over Label", "Game Lost", 250);
+		m_RestartLabel = mTrayMgr->createLabel(TL_CENTER, "Restart Label", "Press R to restart", 250);
+		if (m_playerRef->GetGameWon())
+			m_GameOverLabel->setCaption("Game Won");
+	}
+
+}
+void UIManager::DeleteGameOverLabels()
+{
+	//m_RestartLabel->setCaption("");
+	//m_GameOverLabel->setCaption("");
+
+	//mTrayMgr->clearTray(TL_CENTER);
+	mTrayMgr->destroyAllWidgetsInTray(TL_CENTER);
+	m_RestartLabel = nullptr;
+	m_GameOverLabel = nullptr;
+
+}
+void UIManager::CalculateFPS(const Ogre::FrameEvent& evt)
+{
+	timer += evt.timeSinceLastFrame;
+	if (evt.timeSinceLastFrame != 0)
+	{
+		fpsTotal += 1.0f / evt.timeSinceLastFrame;
+		timePerUpdateTotal += evt.timeSinceLastFrame;
 	}
 	fpsCounter++;
 
@@ -159,6 +197,11 @@ void UIManager::CalculateFPS(float deltaTime)
 	{
 		float finalFPS = fpsTotal / fpsCounter;
 		m_FPS->setCaption(std::to_string(finalFPS));
+
+		float finalTimePerUpdate = timePerUpdateTotal / fpsCounter;
+		m_TimePerUpdate->setCaption(std::to_string(finalTimePerUpdate * 1000) + " ms");
+
+		timePerUpdateTotal = 0.0f;
 		timer = 0.0f;
 		fpsTotal = 0.0f;
 		fpsCounter = 0.0f;
@@ -167,20 +210,20 @@ void UIManager::CalculateFPS(float deltaTime)
 
 bool UIManager::frameStarted(const Ogre::FrameEvent& evt)
 {
-	if (m_paddleRef->GetPointEarned())
+	if (m_playerRef->GetPointEarned())
 	{
-		mScore->setCaption(std::to_string(m_paddleRef->GetScore()));
-		m_paddleRef->SetPointEarned(false);
+		mScore->setCaption(std::to_string(m_playerRef->GetScore()));
+		m_playerRef->SetPointEarned(false);
 	}
-	if (m_paddleRef->GetLifeLost())
+	if (m_playerRef->GetLifeLost())
 	{
-		mLives->setCaption(std::to_string(m_paddleRef->GetLivesRemaining()));
-		m_paddleRef->SetLifeLabel(false);
+		mLives->setCaption(std::to_string(m_playerRef->GetLivesRemaining()));
+		m_playerRef->SetLifeLabel(false);
 	}
 
-	CalculateFPS(evt.timeSinceLastFrame);
-	m_TimePerUpdate->setCaption(std::to_string(evt.timeSinceLastFrame * 1000) + " ms");
+	UpdateGameOverLabels();
 
+	CalculateFPS(evt);
 
 	return true;
 }

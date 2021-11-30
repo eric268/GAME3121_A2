@@ -25,6 +25,7 @@ BackgroundObject::BackgroundObject(Ogre::SceneNode* node, Ogre::SceneManager* sc
 	scnMgr->getRootSceneNode()->addChild(GetAttachedSceneNode());
 	GetAttachedSceneNode()->setScale(GetScale());
 	GetAttachedSceneNode()->setPosition(0, -10, 0);
+	m_vBackgroundStartingPosition = Vector3(0, -10, 0);
 
 	doodlePlayerRef = playerRef;
 	distanceToPlayer = GetAttachedSceneNode()->getPosition().z - playerRef->GetAttachedSceneNode()->getPosition().z;
@@ -51,5 +52,20 @@ bool BackgroundObject::frameStarted(const Ogre::FrameEvent& evt)
 		GetAttachedSceneNode()->setPosition(0, -10, playerZPosition - backgroundZExtent);
 	}
 
+	if (doodlePlayerRef->GetGameOver())
+		GetAttachedSceneNode()->setVisible(false);
+	else
+		GetAttachedSceneNode()->setVisible(true);
+
 	return true;
+}
+
+Vector3 BackgroundObject::GetBackgroundStartingPosition()
+{
+	return m_vBackgroundStartingPosition;
+}
+
+void BackgroundObject::SetBackgroundStartingPosition(Vector3 startingPos)
+{
+	m_vBackgroundStartingPosition = startingPos;
 }

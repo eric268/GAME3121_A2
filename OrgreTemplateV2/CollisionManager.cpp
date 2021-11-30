@@ -1,68 +1,74 @@
 #include "CollisionManager.h"
-#include <iostream>
 #include "algorithm"
-#include "DoodlePlayer.h"
-//#define DEBUG
 
-bool CollisionManager::AABBSphere(CubeCollider* cube, SphereCollider* sphere)
+bool CollisionManager::PointAABBCollision(Vector3 point, CubeCollider* cube)
 {
-//	const float xCubeMin = cube->GetSceneNode()->getPosition().x - (50.0f * cube->GetScale().x);
-//	const float xCubeMax = cube->GetSceneNode()->getPosition().x + (50.0f * cube->GetScale().x);
-//	const float yCubeMin = cube->GetSceneNode()->getPosition().y - (50.0f * cube->GetScale().y);
-//	const float yCubeMax = cube->GetSceneNode()->getPosition().y + (50.0f * cube->GetScale().y);
-//	const float zCubeMin = cube->GetSceneNode()->getPosition().z - (50.0f * cube->GetScale().z);
-//	const float zCubeMax = cube->GetSceneNode()->getPosition().z + (50.0f * cube->GetScale().z);
-//
-//	float radius = 0;
-//
-//	DoodlePlayer* ball = dynamic_cast<DoodlePlayer*>(sphere);
-//
-//	try
-//	{
-//		if (ball)
-//			radius = ball->GetRadius();
-//		else
-//		{
-//			std::bad_cast bC = std::bad_cast::__construct_from_string_literal("Failed to cast Game Object Sphere to Pong Ball in AABBSphere CollisionManager");
-//			throw bC;
-//		}
-//
-//	}
-//	catch (const std::bad_cast& e)
-//	{
-//		std::cout << e.what() << '\n';
-//		exit(1);
-//	}
-//
-//	float xSpherePos = sphere->GetSceneNode()->getPosition().x;
-//	float ySpherePos = sphere->GetSceneNode()->getPosition().y;
-//	float zSpherePos = sphere->GetSceneNode()->getPosition().z;
-//
-//#ifdef DEBUG
-//	std::cout << "xMin: " << xMin << std::endl;
-//	std::cout << "xMax: " << xMax << std::endl;
-//	std::cout << "yMin: " << yMin << std::endl;
-//	std::cout << "yMax: " << yMax << std::endl;
-//	std::cout << "zMin: " << zMin << std::endl;
-//	std::cout << "zMax: " << zMax << std::endl;
-//	std::cout << "Radius: " << radius << std::endl;
-//#endif // DEBUG
-//	
-//	float x = std::max(xCubeMin, std::min(xSpherePos, xCubeMax));
-//	float y = std::max(yCubeMin, std::min(ySpherePos, yCubeMax));
-//	float z = std::max(zCubeMin, std::min(zSpherePos, zCubeMax));
-//	
-//	float distance = (x - xSpherePos) * (x - xSpherePos) + (y - ySpherePos) * (y - ySpherePos) + (z - zSpherePos) * (z - zSpherePos);
-//
-//	//Square radius so that we don't have to take sqrt of distance. More optimized
-//	bool ans = distance < (radius* radius);
-//
-//	if (ball)
-//	{
-//		ball->SetIsColliding(ans);
-//	}
+	return (point.x >= cube->GetMinX() && point.x <= cube->GetMaxX()) &&
+		   (point.y >= cube->GetMinY() && point.y <= cube->GetMaxY()) &&
+		   (point.z >= cube->GetMinZ() && point.z <= cube->GetMaxZ());
+}
 
-	return false;
+bool CollisionManager::PointSphereCollision(Vector3 point, SphereCollider* sphere)
+{
+	float distance = Math::Sqr((point.x - sphere->GetWorldPosition().x) * (point.x - sphere->GetWorldPosition().x) +
+				     (point.y - sphere->GetWorldPosition().y) * (point.y - sphere->GetWorldPosition().y) +
+					 (point.z - sphere->GetWorldPosition().z) * (point.z - sphere->GetWorldPosition().z));
+
+	return distance < sphere->GetRadius();
+}
+
+bool CollisionManager::SquaredPointSphereCollision(Vector3 point, SphereCollider* sphere)
+{
+	float distance = (point.x - sphere->GetWorldPosition().x) * (point.x - sphere->GetWorldPosition().x) +
+					 (point.y - sphere->GetWorldPosition().y) * (point.y - sphere->GetWorldPosition().y) +
+					 (point.z - sphere->GetWorldPosition().z) * (point.z - sphere->GetWorldPosition().z);
+
+	return distance < (sphere->GetRadius()* sphere->GetRadius());
+}
+
+bool CollisionManager::SquaredSphereSphereCollision(SphereCollider* sphere1, SphereCollider* sphere2)
+{
+	float distance = (sphere1->GetWorldPosition().x - sphere2->GetWorldPosition().x) * (sphere1->GetWorldPosition().x - sphere2->GetWorldPosition().x) +
+					 (sphere1->GetWorldPosition().y - sphere2->GetWorldPosition().y) * (sphere1->GetWorldPosition().y - sphere2->GetWorldPosition().y) +
+					 (sphere1->GetWorldPosition().z - sphere2->GetWorldPosition().z) * (sphere1->GetWorldPosition().z - sphere2->GetWorldPosition().z);
+
+	return distance < (sphere1->GetRadius()* sphere1->GetRadius() + sphere2->GetRadius() * sphere2->GetRadius());
+
+}
+
+bool CollisionManager::SphereSphereCollision(SphereCollider* sphere1, SphereCollider* sphere2)
+{
+	float distance = Math::Sqr((sphere1->GetWorldPosition().x - sphere2->GetWorldPosition().x) * (sphere1->GetWorldPosition().x - sphere2->GetWorldPosition().x) +
+						      (sphere1->GetWorldPosition().y - sphere2->GetWorldPosition().y) * (sphere1->GetWorldPosition().y - sphere2->GetWorldPosition().y) +
+							  (sphere1->GetWorldPosition().z - sphere2->GetWorldPosition().z) * (sphere1->GetWorldPosition().z - sphere2->GetWorldPosition().z));
+
+	return distance < (sphere1->GetRadius() + sphere2->GetRadius());
+}
+
+bool CollisionManager::AABBSphereCollision(CubeCollider* cube, SphereCollider* sphere)
+{
+	float x = std::max(cube->GetMinX(), std::min(sphere->GetWorldPosition().x, cube->GetMaxX()));
+	float y = std::max(cube->GetMinY(), std::min(sphere->GetWorldPosition().y, cube->GetMaxY()));
+	float z = std::max(cube->GetMinZ(), std::min(sphere->GetWorldPosition().z, cube->GetMaxZ()));
+
+	float distance =Math::Sqr((x - sphere->GetWorldPosition().x) * (x - sphere->GetWorldPosition().x) +
+		(y - sphere->GetWorldPosition().y) * (y - sphere->GetWorldPosition().y) +
+		(z - sphere->GetWorldPosition().z) * (z - sphere->GetWorldPosition().z));
+
+	return distance < sphere->GetRadius();
+}
+
+bool CollisionManager::SquaredAABBSphereCollision(CubeCollider* cube, SphereCollider* sphere)
+{
+	float x = std::max(cube->GetMinX(), std::min(sphere->GetWorldPosition().x, cube->GetMaxX()));
+	float y = std::max(cube->GetMinY(), std::min(sphere->GetWorldPosition().y, cube->GetMaxY()));
+	float z = std::max(cube->GetMinZ(), std::min(sphere->GetWorldPosition().z, cube->GetMaxZ()));
+
+	float distance = (x - sphere->GetWorldPosition().x) * (x - sphere->GetWorldPosition().x) +
+					 (y - sphere->GetWorldPosition().y) * (y - sphere->GetWorldPosition().y) +
+					 (z - sphere->GetWorldPosition().z) * (z - sphere->GetWorldPosition().z);
+
+	return distance < (sphere->GetRadius() * sphere->GetRadius());
 }
 
 bool CollisionManager::AABBCollision(CubeCollider* cube1, CubeCollider* cube2)

@@ -59,7 +59,7 @@ public:
 
 	Vector3 GetExtents();
 
-	void CreateBoundingBox(Ogre::SceneManager* scnMgr);
+	void CreateBoundingBox(Ogre::SceneManager* scnMgr, int idNumber);
 	void TranslateBoundingBox(Vector3 pos);
 
 	float GetMinX();
@@ -94,7 +94,7 @@ public:
 
 	float GetRadius();
 	void SetRadius(float radius);
-	void CreateSphericalBoundingBox(SceneManager* scnMgr);
+	void CreateSphericalBoundingBox(SceneManager* scnMgr,int idNumber);
 	void TranslateSphericalBoundingBox(Vector3 pos);
 
 private:

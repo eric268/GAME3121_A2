@@ -18,6 +18,7 @@ private:
 
 	float fpsCounter = 0.0f;
 	float fpsTotal = 0.0f;
+	float timePerUpdateTotal;
 	float timer = 0.0f;
 
 	//Labels
@@ -33,9 +34,10 @@ private:
 	OgreBites::Label* m_TimePerUpdateLabel;
 	OgreBites::Label* m_TimePerUpdate;
 
+	OgreBites::Label* m_GameOverLabel;
+	OgreBites::Label* m_RestartLabel;
 
-	Platform* m_paddleRef;
-	DoodlePlayer* m_ballRef;
+	DoodlePlayer* m_playerRef;
 
 	OgreBites::TrayManager* mTrayMgr;
 public:
@@ -50,7 +52,7 @@ public:
 	/// @param mTrayMgr This is a reference to the TrayManager created in the Main.cpp file. This allows for the UI elements to be displayed to the correct viewport.
 	/// @param paddleRef This is a reference to the player paddle game object. This allows for checking if UI updates need to be done such as changing the score.
 	/// @param ballRef This is a reference to the player paddle game object. This allows for checking if UI updates need to be done such as if the ball has gone past the protected area and a life has been lost.
-	UIManager(OgreBites::TrayManager* mTrayMgr, Platform* paddleRef, DoodlePlayer* ballRef);
+	UIManager(OgreBites::TrayManager* mTrayMgr, DoodlePlayer* ballRef);
 
 	/// UIManager Destructor
 	///
@@ -94,7 +96,7 @@ public:
 	/// 
 	/// Receives the amount of time since last frame and calculates the current update time per frame. Then averages the update time per frame across all updates within a second. 
 	/// @param deltaTime provides the time since the last frame was updated. This is used to calculate the average frames updated in a second.
-	void CalculateFPS(float deltaTime);
+	void CalculateFPS(const Ogre::FrameEvent& evt);
 
 	/// Changes the Score Labels label
 	/// 
@@ -143,6 +145,16 @@ public:
 	/// Allows for the FPS label to be initialized or set to different labels.
 	/// @param label is the OgreBites::Label pointer value the FPS label will be set too.
 	void SetFPS(OgreBites::Label* label);
+
+	void SetGameOverLabel(OgreBites::Label* label);
+	OgreBites::Label& GetGameOverLabel();
+
+	void SetRestartGameLabel(OgreBites::Label* label);
+	OgreBites::Label& GetRestartGameLabel();
+	
+	void UpdateGameOverLabels();
+
+	void DeleteGameOverLabels();
 
 	/// Overrides the bool GameObject::frameStarted(const Ogre::FrameEvent& evt) function found in GameObject.h
 	/// 

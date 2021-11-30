@@ -135,10 +135,11 @@ Vector3 CubeCollider::GetExtents()
 	return Vector3(xExtent, yExtent, zExtent);
 }
 
-void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr)
+void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr, int idNumber)
 {
 	Entity* entity = scnMgr->createEntity("cube.mesh");
-	m_boundingBoxNode = scnMgr->createSceneNode("Player bounding box node");
+	std::string name = "BoundingBox " + std::to_string(idNumber);
+	m_boundingBoxNode = scnMgr->createSceneNode(name);
 	m_boundingBoxNode->attachObject(entity);
 	m_boundingBoxNode->setScale(xExtent/50.0f, yExtent / 50.0f, zExtent / 50.0f);
 
@@ -217,10 +218,10 @@ void SphereCollider::SetRadius(float radius)
 	m_radius = radius;
 }
 
-void SphereCollider::CreateSphericalBoundingBox(SceneManager* scnMgr)
+void SphereCollider::CreateSphericalBoundingBox(SceneManager* scnMgr, int idNumber)
 {
 	Entity* entity = scnMgr->createEntity("sphere.mesh");
-	sphericalBoundingBoxNode = scnMgr->createSceneNode("Player spherical bounding box node");
+	sphericalBoundingBoxNode = scnMgr->createSceneNode("Sphere bounding box: " + idNumber);
 	sphericalBoundingBoxNode->attachObject(entity);
 	sphericalBoundingBoxNode->setScale(m_radius / 100.0f, m_radius / 100.0f, m_radius / 100.0f);
 
