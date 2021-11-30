@@ -240,37 +240,3 @@ void SphereCollider::TranslateSphericalBoundingBox(Vector3 pos)
 	}
 }
 
-CapsuleCollider::CapsuleCollider(SceneNode* attachedSceneNode)
-{
-	SetAttachedSceneNode(attachedSceneNode);
-	SetColliderType(CAPSULE);
-	m_radius = 5.0f;
-	m_height = 10.0f;
-	SetIsTrigger(false);
-	SetLocalPosition(Vector3(0, 0, 0));
-}
-
-CapsuleCollider::~CapsuleCollider()
-{
-}
-
-float CapsuleCollider::GetRadius()
-{
-	return m_radius;
-}
-
-float CapsuleCollider::GetHeight()
-{
-	return m_height;
-}
-
-void CapsuleCollider::SetRadius(float radius)
-{
-	m_radius = radius;
-}
-
-void CapsuleCollider::SetHeight(float height)
-{
-	m_height = height;
-}
-

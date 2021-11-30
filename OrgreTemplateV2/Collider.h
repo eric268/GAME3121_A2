@@ -8,7 +8,6 @@ enum ColliderType
 	NONE = -1,
 	CUBE,
 	SPHERE,
-	CAPSULE,
 	NUM_COLLIDER_TYPES,
 };
 
@@ -101,21 +100,4 @@ private:
 	float m_radius;
 	SceneNode* sphericalBoundingBoxNode;
 	bool boundingBoxNodeCreated;
-};
-
-class CapsuleCollider : public Collider
-{
-public:
-	CapsuleCollider(SceneNode* attachedSceneNode);
-	~CapsuleCollider();
-
-	float GetRadius();
-	float GetHeight();
-
-	void SetRadius(float radius);
-	void SetHeight(float height);
-
-private:
-	float m_radius;
-	float m_height;
 };

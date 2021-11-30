@@ -24,7 +24,7 @@ DoodlePlayer::DoodlePlayer()
 	playerDiedZValue = -150.0f;
 }
 
-DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Platform** platformRef, int numPlatforms)
+DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Platform** platformRef,Log* gameLogRef, int numPlatforms)
 {
 	SetEntity(scnMgr->createEntity("penguin.mesh"));
 	GetEntity()->setCastShadows(false);
@@ -42,6 +42,9 @@ DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Pl
 	m_bPointEarned = false;
 	m_bLifeLost = false;
 	m_iLivesRemaining = 3;
+
+	m_gameLogRef = gameLogRef;
+	m_fTotalGameTime = 0.0f;
 
 	//Physics body initalization
 	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
@@ -116,7 +119,7 @@ void DoodlePlayer::CheckBounds()
 		//SetVelocity(Ogre::Vector3(0, 0, GetSpeed()));
 		DecrementLivesRemaining();
 		SetLifeLabel(true);
-		if (m_iLivesRemaining <= 0)
+		if (m_iLivesRemaining <= 0 && !m_bGameOver)
 		{
 			m_bGameOver = true;
 			m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
@@ -137,16 +140,19 @@ void DoodlePlayer::CheckBounds()
 
 bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 {
-	//std::cout << GetAttachedSceneNode()->getPosition().x << std::endl;
-	m_physicsBody->Update(evt.timeSinceLastFrame);
-
-	CheckBounds();
-	UpdateCameraPosition(evt);
-	CheckForCollisionWithPlatform();
-	if (m_iLivesRemaining <= 0)
+	if (!m_bGameOver)
 	{
-		GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
-		m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
+		m_fTotalGameTime += evt.timeSinceLastFrame;
+		m_physicsBody->Update(evt.timeSinceLastFrame);
+
+		CheckBounds();
+		UpdateCameraPosition(evt);
+		CheckForCollisionWithPlatform();
+		if (m_iLivesRemaining <= 0)
+		{
+			GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
+			m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
+		}
 	}
 
 
@@ -265,11 +271,14 @@ void DoodlePlayer::HidePlayerAndPlatforms()
 		m_platformArrayRef[i]->GetAttachedSceneNode()->setVisible(false);
 }
 
-void DoodlePlayer::ShowPlayerAndPlatforms()
+void DoodlePlayer::ResetPlayerAndPlatforms()
 {
 	GetAttachedSceneNode()->setVisible(true);
 	for (int i = 0; i < m_iNumberOfPlatforms; i++)
+	{
 		m_platformArrayRef[i]->GetAttachedSceneNode()->setVisible(true);
+		m_platformArrayRef[i]->SetPointEarned(false);
+	}
 }
 
 int DoodlePlayer::GetScore()
@@ -316,7 +325,11 @@ void DoodlePlayer::CollisionWithPlayer(Platform* platform)
 	float z2 = platform->GetCubeCollider()->GetWorldPosition().z - platform->GetCubeCollider()->GetZExtent();
 	float overlap = z2 - z1;
 	GetAttachedSceneNode()->translate(0, 0, -overlap);
-	IncrementScore();
+	if (!platform->GetPointEarned())
+	{
+		platform->SetPointEarned(true);
+		IncrementScore();
+	}
 	SetPointEarned(true);
 	PlayerHitPlatform();
 }
@@ -335,6 +348,9 @@ void DoodlePlayer::CheckForCollisionWithPlatform()
 					m_bGameOver = true;
 					m_bGameWon = true;
 					m_physicsBody->SetIsAffectedByGravity(false);
+					std::string message = "Total Game Time: " + std::to_string(m_fTotalGameTime);
+					m_gameLogRef->logMessage(message, LML_NORMAL, false);
+					m_fTotalGameTime = 0.0f;
 					HidePlayerAndPlatforms();
 				}
 				break;

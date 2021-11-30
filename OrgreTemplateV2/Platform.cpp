@@ -6,7 +6,7 @@ Platform::Platform()
 {
 	SetSceneNode(nullptr);
 	SetEntity(nullptr);
-
+	m_bPointEarned = false;
 	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());;
 	SetScale(Ogre::Vector3(0.5f, 0.1f, 0.1f));
 }
@@ -26,6 +26,7 @@ Platform::Platform(Ogre::SceneNode* player, Ogre::SceneManager* scnMgr, int plat
 	GetAttachedSceneNode()->pitch(Degree(-90));
 	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
 	m_cubeCollider->SetAllExtent(Vector3(35.0f,25.0f,5.0f));
+	m_bPointEarned = false;
 
 #ifdef DEBUG
 	m_cubeCollider->CreateBoundingBox(scnMgr, m_iPlatformIDNumber);
@@ -45,4 +46,14 @@ bool Platform::frameStarted(const Ogre::FrameEvent& evt)
 CubeCollider* Platform::GetCubeCollider()
 {
 	return m_cubeCollider;
+}
+
+void Platform::SetPointEarned(bool pEarned)
+{
+	m_bPointEarned = pEarned;
+}
+
+bool Platform::GetPointEarned()
+{
+	return m_bPointEarned;
 }

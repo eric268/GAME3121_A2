@@ -95,25 +95,6 @@ MainInitalizer::MainInitalizer()
 
 MainInitalizer::~MainInitalizer()
 {
-	for (int i = 0; i < m_iNumberOfPlatforms; i++)
-	{
-		delete m_platformArray[i];
-		m_platformArray[i] = nullptr;
-	}
-
-	delete m_backgroundObject[0];
-	m_backgroundObject[0] = nullptr;
-
-	delete m_backgroundObject[1];
-	m_backgroundObject[1] = nullptr;
-
-
-	delete m_doodlePlayer;
-	m_doodlePlayer = nullptr;
-	delete m_UIManager;
-	m_UIManager = nullptr;
-	delete scnMgr;
-	scnMgr = nullptr;
 }
 
 
@@ -217,12 +198,11 @@ void MainInitalizer::createScene()
 
 	
 	InitPlatforms();
+	Ogre::LogManager::getSingletonPtr()->getDefaultLog()->setDebugOutputEnabled(true);
+	Log* log = LogManager::getSingleton().createLog("GameLog.log", true, true, false);
+	log->logMessage("this is my log", LML_NORMAL, false);
 	// and tell it to render into the main window
-	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_platformArray, m_iNumberOfPlatforms);
-
-
-
-
+	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_platformArray,log, m_iNumberOfPlatforms);
 	m_backgroundObject[0] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode1"), scnMgr, m_doodlePlayer, 0);
 	m_backgroundObject[1] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode2"), scnMgr, m_doodlePlayer, 1);
 	m_backgroundObject[1]->GetAttachedSceneNode()->setPosition(0, -10, -m_backgroundObject[1]->GetBackgroundZExtent());
@@ -252,7 +232,7 @@ void MainInitalizer::RestartGame()
 	m_doodlePlayer->SetGameOver(false);
 	m_doodlePlayer->SetGameWon(false);
 	m_doodlePlayer->GetPhysicsBody()->SetIsAffectedByGravity(true);
-	m_doodlePlayer->ShowPlayerAndPlatforms();
+	m_doodlePlayer->ResetPlayerAndPlatforms();
 
 	m_backgroundObject[0]->GetAttachedSceneNode()->setVisible(true);
 	m_backgroundObject[1]->GetAttachedSceneNode()->setVisible(true);

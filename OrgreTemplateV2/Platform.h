@@ -10,7 +10,7 @@ class Platform : public GameObject
 {
 private:
 	int m_iPlatformIDNumber;
-
+	bool m_bPointEarned;
 	CubeCollider* m_cubeCollider;
 public:
 	/// Default constructor for the PongPaddle.
@@ -37,6 +37,8 @@ public:
 	bool frameStarted(const Ogre::FrameEvent& evt);
 
 	CubeCollider* GetCubeCollider();
+	void SetPointEarned(bool pEarned);
+	bool GetPointEarned();
 };
 
 

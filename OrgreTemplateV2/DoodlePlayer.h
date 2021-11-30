@@ -5,6 +5,7 @@
 #include "PhysicsBody.h"
 #include "Platform.h"
 #include "Collider.h"
+#include "OgreLogManager.h"
 
 
 /// The class which controls all Pong Ball functionality
@@ -33,6 +34,8 @@ private:
 	int m_iNumberOfPlatforms;
 	bool m_bGameOver;
 	bool m_bGameWon;
+	Log* m_gameLogRef;
+	float m_fTotalGameTime;
 
 public:
 	//Constructor
@@ -48,7 +51,7 @@ public:
 	/// @param scnMgr This takes in a reference to the SceneManager pointer found in the MainInitalizer class in main.cpp.
 	/// @param pRef This is a PongPaddle reference that is used for collision detection between the player paddle and the ball.
 	/// @note The ball is the game object that handles collision between the paddle and it's self. This is because their is no collision response for the paddle, only for the ball.
-	DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Platform** platformRef, int numPlatforms);
+	DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Platform** platformRef, Log* gameLogRef, int numPlatforms);
 
 	///PongBall Destructor
 	///
@@ -175,7 +178,7 @@ public:
 	bool GetGameWon();
 
 	void HidePlayerAndPlatforms();
-	void ShowPlayerAndPlatforms();
+	void ResetPlayerAndPlatforms();
 
 
 };

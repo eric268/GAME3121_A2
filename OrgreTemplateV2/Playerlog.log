@@ -1,0 +1,19 @@
+12:33:48: this is my log
+12:33:48: Mesh: Loading cube.mesh.
+12:33:48: Texture 'background.png': Loading 1 faces(PF_A8B8G8R8,400x533x1) with 9 generated mipmaps from Image. Internal format is PF_A8B8G8R8,400x533x1.
+12:33:48: Warning: material Comps/Comp2 has no supportable Techniques and will be blank. Explanation: 
+Pass 0: fragment program MyFragmentShader21 cannot be used - not supported.
+
+12:33:48: Warning: material Comps/Comp2 has no supportable Techniques and will be blank. Explanation: 
+Pass 0: fragment program MyFragmentShader21 cannot be used - not supported.
+
+12:33:48: CompositorChain: Compositor Compositor2 has no supported techniques.
+12:33:48: Texture 'spot_shadow_fade.png': Loading 1 faces(PF_B8G8R8,128x128x1) with 7 generated mipmaps from Image. Internal format is PF_A8B8G8R8,128x128x1.
+12:33:48: Warnings while compiling D3D11 high-level shader 3acb8316c86e5802dcd22837a701a3cc_VS:
+(31,14-25): warning X3578: Output value 'oTexcoord3_0' is not completely initialized
+
+12:33:48: Warnings while compiling D3D11 high-level shader d368c69c1ef0f646d19c48432f05e338_FS:
+SGXLib_LayeredBlending.cg(60,41): warning X4000: use of potentially uninitialized variable (hsl)
+
+12:33:48: Font SdkTrays/Caption using texture size 256x256
+12:33:48: Texture 'SdkTrays/CaptionTexture': Loading 1 faces(PF_BYTE_LA,256x256x1) with 0 custom mipmaps from Image. Internal format is PF_A8B8G8R8,256x256x1.
