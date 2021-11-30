@@ -19,7 +19,7 @@ UIManager::UIManager()
 	m_TimePerUpdate = nullptr;
 }
 
-UIManager::UIManager(OgreBites::TrayManager* mT, PongPaddle* paddleRef, DoodlePlayer* ballRef)
+UIManager::UIManager(OgreBites::TrayManager* mT, Platform* paddleRef, DoodlePlayer* ballRef)
 {
 	mTrayMgr = mT;
 	m_paddleRef = paddleRef;

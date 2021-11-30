@@ -34,7 +34,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="PhysicsBody.cpp" />
-    <ClCompile Include="PongPaddle.cpp">
+    <ClCompile Include="Platform.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
@@ -54,7 +54,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="PhysicsBody.h" />
-    <ClInclude Include="PongPaddle.h">
+    <ClInclude Include="Platform.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="UIManager.h" />

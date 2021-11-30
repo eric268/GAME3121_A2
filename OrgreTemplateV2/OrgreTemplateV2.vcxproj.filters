@@ -30,7 +30,7 @@
     <ClCompile Include="DoodlePlayer.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="PongPaddle.cpp">
+    <ClCompile Include="Platform.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
@@ -56,7 +56,7 @@
     <ClInclude Include="DoodlePlayer.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="PongPaddle.h">
+    <ClInclude Include="Platform.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">

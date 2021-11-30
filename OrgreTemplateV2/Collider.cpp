@@ -76,7 +76,7 @@ CubeCollider::CubeCollider(SceneNode* attachedSceneNode)
 {
 	SetColliderType(CUBE);
 	SetAttachedSceneNode(attachedSceneNode);
-	SetAllEdges(10.0f);
+	SetAllExtent(10.0f);
 	SetIsTrigger(false);
 	SetLocalPosition(Vector3(0, 0, 0));
 	boundingBoxNodeCreated = false;
@@ -86,48 +86,53 @@ CubeCollider::~CubeCollider()
 {
 }
 
-float CubeCollider::GetXLength()
+float CubeCollider::GetXExtent()
 {
-	return xLength;
+	return xExtent;
 }
 
-float CubeCollider::GetYLength()
+float CubeCollider::GetYExtent()
 {
-	return yLength;
+	return yExtent;
 }
 
-float CubeCollider::GetZLength()
+float CubeCollider::GetZExtent()
 {
-	return zLength;
+	return zExtent;
 }
 
-void CubeCollider::SetXLength(float length)
+void CubeCollider::SetXExtent(float length)
 {
-	xLength = length;
+	xExtent = length;
 }
 
-void CubeCollider::SetYLength(float length)
+void CubeCollider::SetYExtent(float length)
 {
-	yLength = length;
+	yExtent = length;
 }
 
-void CubeCollider::SetZLength(float length)
+void CubeCollider::SetZExtent(float length)
 {
-	zLength = length;
+	zExtent = length;
 }
 
-void CubeCollider::SetAllEdges(float length)
+void CubeCollider::SetAllExtent(float length)
 {
-	SetXLength(length);
-	SetYLength(length);
-	SetZLength(length);
+	SetXExtent(length);
+	SetYExtent(length);
+	SetZExtent(length);
 }
 
-void CubeCollider::SetAllEdges(Vector3 vec)
+void CubeCollider::SetAllExtent(Vector3 vec)
 {
-	SetXLength(vec.x);
-	SetYLength(vec.y);
-	SetZLength(vec.z);
+	SetXExtent(vec.x);
+	SetYExtent(vec.y);
+	SetZExtent(vec.z);
+}
+
+Vector3 CubeCollider::GetExtents()
+{
+	return Vector3(xExtent, yExtent, zExtent);
 }
 
 void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr)
@@ -135,13 +140,14 @@ void CubeCollider::CreateBoundingBox(Ogre::SceneManager* scnMgr)
 	Entity* entity = scnMgr->createEntity("cube.mesh");
 	m_boundingBoxNode = scnMgr->createSceneNode("Player bounding box node");
 	m_boundingBoxNode->attachObject(entity);
-	m_boundingBoxNode->setScale(xLength/50.0f, yLength / 50.0f, zLength / 50.0f);
+	m_boundingBoxNode->setScale(xExtent/50.0f, yExtent / 50.0f, zExtent / 50.0f);
 
 	m_boundingBoxNode->setPosition(Vector3(GetAttachedSceneNode()->getPosition().x + GetLocalPosition().x, GetAttachedSceneNode()->getPosition().y + GetLocalPosition().y,
 		GetAttachedSceneNode()->getPosition().z + GetLocalPosition().z));
 	
 	scnMgr->getRootSceneNode()->addChild(m_boundingBoxNode);
 	boundingBoxNodeCreated = true;
+	entity->setMaterial(Ogre::MaterialManager::getSingleton().getByName("Platform"));
 }
 
 void CubeCollider::TranslateBoundingBox(Vector3 pos)
@@ -152,6 +158,41 @@ void CubeCollider::TranslateBoundingBox(Vector3 pos)
 	}
 }
 
+float CubeCollider::GetMinX()
+{
+	minX = GetWorldPosition().x - GetXExtent();
+	return minX;
+}
+
+float CubeCollider::GetMaxX()
+{
+	maxX = GetWorldPosition().x + GetXExtent();
+	return maxX;
+}
+
+float CubeCollider::GetMinY()
+{
+	minY = GetWorldPosition().y - GetYExtent();
+	return minY;
+}
+
+float CubeCollider::GetMaxY()
+{
+	maxY = GetWorldPosition().y + GetYExtent();
+	return maxY;
+}
+
+float CubeCollider::GetMinZ()
+{
+	minZ = GetWorldPosition().z - GetZExtent();
+	return minZ;
+}
+
+float CubeCollider::GetMaxZ()
+{
+	maxZ = GetWorldPosition().z + GetZExtent();
+	return maxZ;
+}
 
 SphereCollider::SphereCollider(SceneNode* attachedSceneNode)
 {

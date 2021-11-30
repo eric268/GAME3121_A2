@@ -46,27 +46,44 @@ public:
 	CubeCollider(SceneNode* attachedSceneNode);
 	~CubeCollider();
 
-	float GetXLength();
-	float GetYLength();
-	float GetZLength();
+	float GetXExtent();
+	float GetYExtent();
+	float GetZExtent();
 
-	void SetXLength(float length);
-	void SetYLength(float length);
-	void SetZLength(float length);
+	void SetXExtent(float length);
+	void SetYExtent(float length);
+	void SetZExtent(float length);
 
-	void SetAllEdges(float length);
-	void SetAllEdges(Vector3 vec);
+	void SetAllExtent(float length);
+	void SetAllExtent(Vector3 vec);
+
+	Vector3 GetExtents();
 
 	void CreateBoundingBox(Ogre::SceneManager* scnMgr);
 	void TranslateBoundingBox(Vector3 pos);
 
+	float GetMinX();
+	float GetMaxX();
+	float GetMinY();
+	float GetMaxY();
+	float GetMinZ();
+	float GetMaxZ();
+
 
 private:
-	float xLength;
-	float yLength;
-	float zLength;
 	SceneNode* m_boundingBoxNode;
 	bool boundingBoxNodeCreated;
+
+	float xExtent;
+	float yExtent;
+	float zExtent;
+
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+	float minZ;
+	float maxZ;
 };
 
 class SphereCollider: public Collider

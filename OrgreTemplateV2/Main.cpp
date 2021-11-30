@@ -7,7 +7,7 @@
 #include "UIManager.h"
 #include "BackgroundObject.h"
 #include "DoodlePlayer.h"
-#include "PongPaddle.h"
+#include "Platform.h"
 
 using namespace Ogre;
 using namespace OgreBites;
@@ -20,7 +20,7 @@ class MainInitalizer
 	, public InputListener
 {
 private:
-	PongPaddle* m_player1Pong;
+	Platform* m_player1Pong;
 	DoodlePlayer*   m_doodlePlayer;
 	BackgroundObject* m_backgroundObject[2];
 	UIManager* m_UIManager;
@@ -129,11 +129,11 @@ bool MainInitalizer::keyReleased(const KeyboardEvent& evt)
 	switch (evt.keysym.sym)
 	{
 	case 'a':
-		m_player1Pong->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, 0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetVelocity().z));
 
 		break;
 	case 'd':
-		m_player1Pong->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, 0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, m_doodlePlayer->GetPhysicsBody()->GetVelocity().z));
 
 		break;
 	default:
@@ -150,13 +150,12 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 		getRoot()->queueEndRendering();
 		break;
 	case 'a':
-
 		m_doodlePlayer->UpdatePlayerDirection('a');
-		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0,0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(-m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0, m_doodlePlayer->GetPhysicsBody()->GetVelocity().z));
 		break;
 	case 'd':
 		m_doodlePlayer->UpdatePlayerDirection('d');
-		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0, 0));
+		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(m_doodlePlayer->GetPhysicsBody()->GetSpeed(), 0, m_doodlePlayer->GetPhysicsBody()->GetVelocity().z));
 		break;
 	case 'w':
 		m_doodlePlayer->GetPhysicsBody()->SetVelocity(Ogre::Vector3(0, 0, -m_doodlePlayer->GetPhysicsBody()->GetSpeed()));
@@ -168,7 +167,6 @@ bool MainInitalizer::keyPressed(const KeyboardEvent& evt)
 		//RestartGame();
 		break;
 	case 'q':
-		m_player1Pong->GetAttachedSceneNode()->setPosition(Ogre::Vector3(-100, 0, m_doodlePlayer->GetAttachedSceneNode()->getPosition().z));
 		break;
 	default:
 		break;
@@ -196,8 +194,9 @@ void MainInitalizer::createScene()
 	light->setSpecularColour(1.0f, 1.0f, 0.0f);
 
 	// and tell it to render into the main window
-	m_player1Pong = new PongPaddle(scnMgr->createSceneNode("Player1"),scnMgr);
-	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr, m_player1Pong);
+	m_doodlePlayer = new DoodlePlayer(scnMgr->createSceneNode("Ball"), scnMgr);
+	m_player1Pong = new Platform(scnMgr->createSceneNode("Player1"),scnMgr, m_doodlePlayer);
+
 
 
 	m_backgroundObject[0] = new BackgroundObject(scnMgr->createSceneNode("BackgroundNode1"), scnMgr, m_doodlePlayer, 0);

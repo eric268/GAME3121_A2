@@ -20,6 +20,7 @@ public:
 	static bool AABBSphere(CubeCollider* cube, SphereCollider* sphere);
 
 
-	static bool AABBCollision(CubeCollider* cube1, CubeCollider cube2);
+	static bool AABBCollision(CubeCollider* cube1, CubeCollider* cube2);
+
 };
 

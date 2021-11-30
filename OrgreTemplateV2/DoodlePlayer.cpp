@@ -1,7 +1,7 @@
 #include "DoodlePlayer.h"
 #include <string>
 #include <iostream>
-#define DEBUG
+//#define DEBUG
 
 DoodlePlayer::DoodlePlayer()
 {
@@ -13,19 +13,19 @@ DoodlePlayer::DoodlePlayer()
 	SetScale(Ogre::Vector3(0.05f, 0.05f, 0.05f));
 	m_physicsBody->SetWeight(1.0f);
 	m_radius = 100.0f * GetScale().x;
-	m_paddleRef = nullptr;
 	distanceFromCameraToPlayerZAxis = 0;
 	isFacingLeft = false;
 	camera = nullptr;
 	cameraNode = nullptr;
 	m_cubeCollider = nullptr;
+	m_iLivesRemaining = 3;
 }
 
-DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, PongPaddle* pRef)
+DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr)
 {
 	SetEntity(scnMgr->createEntity("penguin.mesh"));
 	GetEntity()->setCastShadows(false);
-	m_paddleRef = pRef;
+
 	SetSceneNode(node);
 	GetAttachedSceneNode()->attachObject(GetEntity());
 	scnMgr->getRootSceneNode()->addChild(GetAttachedSceneNode());
@@ -36,19 +36,20 @@ DoodlePlayer::DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, Po
 	GetAttachedSceneNode()->pitch(Degree(-90));
 	distanceFromCameraToPlayerZAxis = 0;
 	isFacingLeft = true;
+	m_iLivesRemaining = 3;
 
 	//Physics body initalization
 	m_physicsBody = new PhysicsBody(GetAttachedSceneNode());
-	m_physicsBody->SetSpeed(25.0f);
+	m_physicsBody->SetSpeed(100.0f);
 	m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
 	m_physicsBody->SetWeight(1.0f);
-	m_physicsBody->SetGravityScale(4.5f);
-	m_physicsBody->SetIsAffectedByGravity(false);
+	m_physicsBody->SetGravityScale(10.0f);
+	m_physicsBody->SetIsAffectedByGravity(true);
 
 	//Creates box collider for player
 	m_bIsColliding = false;
 	m_cubeCollider = new CubeCollider(GetAttachedSceneNode());
-	m_cubeCollider->SetAllEdges(Vector3(25.0f, 25.0f, 3.0f));
+	m_cubeCollider->SetAllExtent(Vector3(25.0f, 25.0f, 3.0f));
 	m_cubeCollider->SetLocalPosition(Vector3(0, 0, 20));
 
 	//Creates player follow camera
@@ -73,31 +74,6 @@ bool DoodlePlayer::GetIsColliding()
 void DoodlePlayer::SetIsColliding(bool colliding)
 {
 	m_bIsColliding = colliding;
-}
-
-void DoodlePlayer::VelocityAfterPaddleCollision()
-{
-	
-	Ogre::Vector3 paddelMomentum = m_paddleRef->GetPhysicsBody()->GetWeight() * m_paddleRef->GetPhysicsBody()->GetVelocity();
-	Ogre::Vector3 ballMomentum = m_physicsBody->GetWeight() * m_physicsBody->GetVelocity();
-	Ogre::Vector3 totalMomentum = paddelMomentum + ballMomentum;
-
-	float totalMass = m_paddleRef->GetPhysicsBody()->GetWeight() + m_physicsBody->GetWeight();
-
-	Ogre::Vector3 newVelocity = totalMomentum / 1;
-
-	m_physicsBody->SetVelocity(Ogre::Vector3(newVelocity.x, 0, newVelocity.z * -1));
-	
-
-}
-
-void DoodlePlayer::CollisionWithPaddle()
-{
-	float overlap = (m_paddleRef->GetAttachedSceneNode()->getPosition().z - 50.0f * m_paddleRef->GetScale().z) - GetAttachedSceneNode()->getPosition().z - GetRadius();
-	GetAttachedSceneNode()->setPosition(GetAttachedSceneNode()->getPosition().x, GetAttachedSceneNode()->getPosition().y, GetAttachedSceneNode()->getPosition().z + overlap);
-	VelocityAfterPaddleCollision();
-	m_paddleRef->IncrementScore();
-	m_paddleRef->SetPointEarned(true);
 }
 
 float DoodlePlayer::GetRadius()
@@ -146,24 +122,17 @@ bool DoodlePlayer::frameStarted(const Ogre::FrameEvent& evt)
 	m_physicsBody->Update(evt.timeSinceLastFrame);
 
 	CheckBounds();
-	if (m_paddleRef->GetLivesRemaining() <= 0)
+	if (m_iLivesRemaining <= 0)
 	{
 		GetAttachedSceneNode()->setPosition(Ogre::Vector3(0, 0, 0));
 		m_physicsBody->SetVelocity(Ogre::Vector3(0, 0, 0));
 	}
 
-	//if (CollisionManager::AABBSphere(m_paddleRef, this))
-	{
-		//CollisionWithPaddle();
-	}
 	distanceFromCameraToPlayerZAxis = cameraNode->getPosition().z - GetAttachedSceneNode()->getPosition().z;
-
-
 	UpdateCameraPosition(evt);
 
 #ifdef DEBUG
-	m_sphereCollider->TranslateSphericalBoundingBox(m_physicsBody->GetVelocity() * evt.timeSinceLastFrame);
-	//m_cubeCollider->TranslateBoundingBox(m_physicsBody->GetVelocity() * evt.timeSinceLastFrame);
+	m_cubeCollider->TranslateBoundingBox(m_physicsBody->GetVelocity() * evt.timeSinceLastFrame);
 #endif // DEBUG
 	
 	return true;
@@ -224,7 +193,23 @@ PhysicsBody* DoodlePlayer::GetPhysicsBody()
 	return m_physicsBody;
 }
 
-Collider* DoodlePlayer::GetCubeCollider()
+CubeCollider* DoodlePlayer::GetCubeCollider()
 {
 	return m_cubeCollider;
+}
+
+int DoodlePlayer::GetLivesRemaining()
+{
+	return m_iLivesRemaining;
+}
+
+void DoodlePlayer::SetLivesRemaining(int livesRemaining)
+{
+	m_iLivesRemaining = livesRemaining;
+}
+
+void DoodlePlayer::PlayerHitPlatform()
+{
+	m_physicsBody->SetVelocity(Vector3(m_physicsBody->GetVelocity().x, 0, 0));
+	m_physicsBody->AddImpulse(Vector3(0, 0, 1), -200.0f);
 }

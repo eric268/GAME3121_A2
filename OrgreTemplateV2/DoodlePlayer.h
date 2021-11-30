@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-#include "PongPaddle.h"
 #include "CollisionManager.h"
 #include "PhysicsBody.h"
 #include "Collider.h"
@@ -16,7 +15,6 @@ private:
 	Camera* camera;
 	bool m_bIsColliding;
 	Ogre::Vector3 m_vDirection;
-	PongPaddle* m_paddleRef;
 	float m_radius;
 	float cameraPlayerDistanceLimit = 100.0f;
 	float distanceFromCameraToPlayerZAxis;
@@ -25,6 +23,8 @@ private:
 	PhysicsBody* m_physicsBody;
 	CubeCollider* m_cubeCollider;
 	SphereCollider* m_sphereCollider;
+	int m_iLivesRemaining;
+	
 public:
 	//Constructor
 
@@ -39,7 +39,7 @@ public:
 	/// @param scnMgr This takes in a reference to the SceneManager pointer found in the MainInitalizer class in main.cpp.
 	/// @param pRef This is a PongPaddle reference that is used for collision detection between the player paddle and the ball.
 	/// @note The ball is the game object that handles collision between the paddle and it's self. This is because their is no collision response for the paddle, only for the ball.
-	DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr, PongPaddle* pRef);
+	DoodlePlayer(Ogre::SceneNode* node, Ogre::SceneManager* scnMgr);
 
 	///PongBall Destructor
 	///
@@ -74,17 +74,6 @@ public:
 	/// This function ensures that the ball will bounce off the top, left and right bounds of the window. If the ball falls into the protected area this function also returns it to its starting location and notifies the UIManager that it needs to update the remaining lives labels.
 	void CheckBounds();
 
-	/// This function is called when the ball collides with the paddle.
-	/// 
-	/// This function offsets any overlap between the colliding game objects. It then calls a VelocityAfterPaddleCollision() to update the balls velocity.
-	/// @see VelocityAfterPaddleCollision()
-	void CollisionWithPaddle();
-
-	/// Updates ball velocity upon collision
-	/// 
-	/// This function is called when the ball collides with the paddle. This updates the ball's velocity based upon the velocity of the player paddle.
-	void VelocityAfterPaddleCollision();
-
 	/// Overrides the bool GameObject::frameStarted(const Ogre::FrameEvent& evt) function found in GameObject.h
 	/// 
 	/// Checks for updates at the beginning of each frame for all Pong Ball objects. Is updates at a constant time across all hardware.
@@ -103,6 +92,11 @@ public:
 	void UpdatePlayerDirection(char input);
 
 	PhysicsBody* GetPhysicsBody();
-	Collider* GetCubeCollider();
+	CubeCollider* GetCubeCollider();
+
+	int GetLivesRemaining();
+	void SetLivesRemaining(int livesRemaining);
+
+	void PlayerHitPlatform();
 };
 

@@ -64,3 +64,10 @@ bool CollisionManager::AABBSphere(CubeCollider* cube, SphereCollider* sphere)
 
 	return false;
 }
+
+bool CollisionManager::AABBCollision(CubeCollider* cube1, CubeCollider* cube2)
+{
+	return (cube1->GetMinX() <= cube2->GetMaxX() && cube1->GetMaxX() >= cube2->GetMinX()) &&
+		   (cube1->GetMinY() <= cube2->GetMaxY() && cube1->GetMaxY() >= cube2->GetMinY()) &&
+		   (cube1->GetMinZ() <= cube2->GetMaxZ() && cube1->GetMaxZ() >= cube2->GetMinZ());
+}

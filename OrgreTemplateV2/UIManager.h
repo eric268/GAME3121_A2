@@ -3,7 +3,7 @@
 #include "Ogre.h"
 #include "OgreInput.h"
 #include "DoodlePlayer.h"
-#include "PongPaddle.h"
+#include "Platform.h"
 #include "CollisionManager.h"
 
 using namespace Ogre;
@@ -34,7 +34,7 @@ private:
 	OgreBites::Label* m_TimePerUpdate;
 
 
-	PongPaddle* m_paddleRef;
+	Platform* m_paddleRef;
 	DoodlePlayer* m_ballRef;
 
 	OgreBites::TrayManager* mTrayMgr;
@@ -50,7 +50,7 @@ public:
 	/// @param mTrayMgr This is a reference to the TrayManager created in the Main.cpp file. This allows for the UI elements to be displayed to the correct viewport.
 	/// @param paddleRef This is a reference to the player paddle game object. This allows for checking if UI updates need to be done such as changing the score.
 	/// @param ballRef This is a reference to the player paddle game object. This allows for checking if UI updates need to be done such as if the ball has gone past the protected area and a life has been lost.
-	UIManager(OgreBites::TrayManager* mTrayMgr, PongPaddle* paddleRef, DoodlePlayer* ballRef);
+	UIManager(OgreBites::TrayManager* mTrayMgr, Platform* paddleRef, DoodlePlayer* ballRef);
 
 	/// UIManager Destructor
 	///
